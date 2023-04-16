@@ -1,13 +1,21 @@
-import java.util.ArrayList;
 
 public class Paisktabel {
-    private String[] paisktabel;
+    private Integer[] paisktabel;
 
-    public Paisktabel(int len) {
-        this.paisktabel = new String[len];
+    public void makePaisktabel(int len) {
+        this.paisktabel = new Integer[len];
     }
 
-    public void sisesta(int i, String x) {
+    public void delPaisktabel() {
+        this.paisktabel = null;
+    }
+
+
+    public Integer[] getPaisktabel() {
+        return paisktabel;
+    }
+
+    public void sisesta(int i, Integer x) {
         paisktabel[i] = x;
     }
 
@@ -15,15 +23,45 @@ public class Paisktabel {
         paisktabel[i] = null;
     }
 
+    public int leiaVabaKoht(int arv) {
+        int index = arv % paisktabel.length;
+        while (paisktabel[index] != null) {
+            index++;
+            if (index == paisktabel.length) {
+                index = 0;
+            }
+            if (index == arv % paisktabel.length) {
+                return -1;
+            }
+        }
+        return index;
+    }
+
+    public int leiaArvuIndex(Integer eemaldatav) {
+        int key = eemaldatav % paisktabel.length;
+        int index = key;
+        while (paisktabel[index] != eemaldatav) {
+            index++;
+            if (index == paisktabel.length) {
+                index = 0;
+            }
+            if (index == key || paisktabel[index] == null) {
+                return -1;
+            }
+        }
+        return index;
+    }
+
+
+
     @Override
     public String toString() {
         String str = "";
-        str += "  0";
-        for (int i = 1; i < paisktabel.length; i++) {
+        for (int i = 0; i < paisktabel.length; i++) {
             str += " | " + i;
         }
-        str += "\n[ ";
-        for (String el : paisktabel) {
+        str += " |\n [ ";
+        for (Integer el : paisktabel) {
             if (el == null) str += "_";
             else str += el;
             str += " ; ";
@@ -31,4 +69,5 @@ public class Paisktabel {
         str += "]";
         return str;
     }
+
 }

@@ -1,42 +1,40 @@
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Labimang {
-    private int[] sisend;
+    private Sisend sisend;
     private Paisktabel paisktabel;
+    private Stack<Samm> sammud;
+    private ArrayList<Samm> undod;
 
-    private Stack<Samm> sammud = new Stack<>();
-
-    public Labimang(int[] sisend) {
-        this.sisend = sisend;
+    public Labimang(ArrayList<Integer> sisend) {
+        this.sisend = new Sisend(sisend);
+        this.paisktabel = new Paisktabel();
+        this.sammud = new Stack<>();
+        this.undod = new ArrayList<>();
     }
 
-    public void hinda() {
-        //TODO
-    }
 
-    public void make_tabel(int len) {
-        this.paisktabel = new Paisktabel(len);
-
-    }
-
-    public void sisesta(int i, String x) {
-
-        Samm sisesstusSamm = new SisestusSamm(paisktabel, i, x);
-        executeSamm(sisesstusSamm);
-
-    }
-    public void eemalda(int i) {
-        Samm eemaldusSamm = new EemaldusSamm(paisktabel, i);
-        executeSamm(eemaldusSamm);
-    }
-
-    private void executeSamm(Samm samm) {
-        samm.execute();
+    public void astu(Samm samm) {
+        //oigedSammud.push(getOigeSamm());
         sammud.push(samm);
+        samm.execute();
+
     }
 
-    @Override
-    public String toString() {
-        return paisktabel.toString();
+    public Sisend getSisend() {
+        return sisend;
+    }
+
+    public Paisktabel getPaisktabel() {
+        return paisktabel;
+    }
+
+    public void undo() {
+        Samm samm = sammud.pop();
+        samm.undo();
+        undod.add(samm);
+
     }
 }
+

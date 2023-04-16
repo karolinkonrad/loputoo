@@ -1,39 +1,64 @@
-import java.util.Arrays;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
+
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Scanner sc = new Scanner(System.in);
-        int[] sisend = {0, 13, 14, 3};
-        Labimang labimang = new Labimang(sisend);
+        LisamiseSisendiLugeja sisendiLugeja = new LisamiseSisendiLugeja();
+        Labimang labimang = new Labimang(sisendiLugeja.getSisend());
 
-        System.out.println("lisa paisktabelisse " + Arrays.toString(sisend));
+        alusta(labimang);
+
 
         while (true){
+            System.out.println(labimang.getPaisktabel().toString());
+            System.out.println(labimang.getSisend().toString());
+            System.out.println("""
+                    l - algoritm lõpetab
+                    s <x> <i> - sisesta x indeksile i
+                    u - võta tagasi
+                    a - alusta otsast""");
 
             String[] userCommand = sc.nextLine().split(" ");
             switch (userCommand[0]){
-                // v algoritm lõpetab
-                case "v":
-                    labimang.hinda();
+                // l algoritm lõpetab
+                case "l":
+                    labimang.astu(new LopetusSamm(labimang.getPaisktabel()));
                     return;
-                // p <len> loo paisktabel pikkusega len
-                case "p":
-                    int len = Integer.parseInt(userCommand[1]);
-                    labimang.make_tabel(len);
-                    break;
                 // s <x> <i> sisesta x indeksile i
                 case "s":
-                    labimang.sisesta(Integer.parseInt(userCommand[2]), userCommand[1]);
+                    labimang.astu(new SisestusSamm(labimang.getPaisktabel(), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[1])));
                     break;
-                // d <i> kustuta indexilt i
+                case "u":
+                    labimang.undo();
+                    break;
+                case "a":
+                    alusta(labimang);
+                /* d <i> kustuta indexilt i
                 case "d":
-                    labimang.eemalda(Integer.parseInt(userCommand[1]));
+                    labimang.astu(new EemaldusSamm(labimang.getPaisktabel(), Integer.parseInt(userCommand[1])));
+                    */
             }
+        }
+    }
 
-            System.out.println(labimang.toString());
+    private static void alusta(Labimang labimang) {
+        Scanner sc = new Scanner(System.in);
 
+        System.out.println(labimang.getSisend().toString());
+        System.out.println("Sisesta paisktabeli pikkus");
+
+        // küsi paisktabeli pikkust, sest ka paberil nad ei saaks midagi teha, kui pole tabelit
+        while (true) {
+            try {
+                String lenSone = sc.nextLine();
+                labimang.astu(new PaisktabeliLoomisSamm(labimang.getPaisktabel(), Integer.parseInt(lenSone)));
+                break;
+            }catch (RuntimeException e) {
+                System.out.println("Paisktabeli pikkus võiks olla positiivne täisarv.");
+            }
         }
     }
 }

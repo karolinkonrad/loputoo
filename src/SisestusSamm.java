@@ -1,17 +1,22 @@
-public class SisestusSamm implements Samm {
-    private Paisktabel paisktabel;
+public class SisestusSamm extends Samm {
     private int index;
-    private String el;
+    private int arv;
+    private Integer eelmineArv;
 
-
-    public SisestusSamm(Paisktabel paisktabel, int index, String el) {
-        this.paisktabel = paisktabel;
+    public SisestusSamm(Paisktabel paisktabel, int index, int arv) {
+        super(paisktabel);
         this.index = index;
-        this.el = el;
+        this.arv = arv;
     }
 
     @Override
     public void execute() {
-        paisktabel.sisesta(index, el);
+        this.eelmineArv = paisktabel.getPaisktabel()[index];
+        paisktabel.sisesta(index, arv);
+    }
+
+    @Override
+    public void undo() {
+        paisktabel.sisesta(index, eelmineArv);
     }
 }
