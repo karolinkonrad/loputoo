@@ -1,16 +1,27 @@
+
+
 public class LopetusSamm extends Samm {
     // kuidagi seotud hindamisega
-    public LopetusSamm(Paisktabel paisktabel) {
-        super(paisktabel);
+
+
+    public LopetusSamm(Labimang labimang) {
+        super(labimang);
     }
 
     @Override
-    public void execute() {
+    public void astu() {
 
     }
 
     @Override
-    public void undo() {
+    public void tagasi() {
 
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        return true;
+    }
+
 }

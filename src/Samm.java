@@ -1,11 +1,14 @@
-public abstract class Samm {
-    Paisktabel paisktabel;
 
-    public Samm(Paisktabel paisktabel) {
-        this.paisktabel = paisktabel;
+public abstract class Samm{
+    Labimang labimang;
+
+    public Samm(Labimang labimang) {
+        this.labimang = labimang;
     }
 
-    abstract public void execute();
-    abstract public void undo();
+    abstract public void astu();
+    abstract public void tagasi();
+
+    public abstract boolean equals(Object o);
 }
 

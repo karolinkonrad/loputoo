@@ -2,39 +2,67 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Labimang {
-    private Sisend sisend;
-    private Paisktabel paisktabel;
-    private Stack<Samm> sammud;
-    private ArrayList<Samm> undod;
+    private ArrayList<Paisktabel> paisktabelid;
+    private ArrayList<Integer> sisend;
+    private Ylesanne ylesanne;
+    private Stack<Samm> tudengiSammud;
 
-    public Labimang(ArrayList<Integer> sisend) {
-        this.sisend = new Sisend(sisend);
-        this.paisktabel = new Paisktabel();
-        this.sammud = new Stack<>();
-        this.undod = new ArrayList<>();
+    private Stack<Integer> oigedJadad;
+    private int oigeJada;
+
+    public Labimang(Ylesanne ylesanne) {
+        this.paisktabelid = new ArrayList<>();
+        this.sisend = ylesanne.getSisend();
+        this.ylesanne = ylesanne;
+        this.tudengiSammud = new Stack<>();
+
+        this.oigedJadad = new Stack<>();
+        this.oigeJada = 0;
     }
 
 
     public void astu(Samm samm) {
-        //oigedSammud.push(getOigeSamm());
-        sammud.push(samm);
-        samm.execute();
+        Samm oigeSamm = ylesanne.arvutaJargmineSamm(this);
+
+        if (!oigeSamm.equals(samm)) {
+            System.out.println("Vale!");
+            System.out.println(oigeJada);
+            oigedJadad.push(oigeJada);
+            oigeJada = -1;
+
+        }
+        oigeJada++;
+        tudengiSammud.push(samm);
+        samm.astu();
 
     }
+    public void tagasi() {
+        Samm samm = tudengiSammud.pop();
+        samm.tagasi();
+        if (oigeJada == 0)
+            oigeJada = oigedJadad.pop();
+        else
+            oigeJada--;
+    }
+    public ArrayList<Paisktabel> getPaisktabelid() {
+        return paisktabelid;
+    }
 
-    public Sisend getSisend() {
+    public ArrayList<Integer> getSisend() {
         return sisend;
     }
 
-    public Paisktabel getPaisktabel() {
-        return paisktabel;
+    public float getHinne() {
+        oigedJadad.push(oigeJada);
+        int parimJada = 0;
+
+        while (!oigedJadad.isEmpty()) {
+            int jada = oigedJadad.pop();
+            if (jada > parimJada) parimJada = jada;
+        }
+        System.out.println(parimJada + "/" + ylesanne.maxPunktid());
+        return (float) parimJada / (float) ylesanne.maxPunktid();
     }
 
-    public void undo() {
-        Samm samm = sammud.pop();
-        samm.undo();
-        undod.add(samm);
-
-    }
 }
 

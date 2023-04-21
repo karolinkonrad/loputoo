@@ -1,36 +1,33 @@
+import java.util.ArrayList;
 
 public class Paisktabel {
-    private Integer[] paisktabel;
+    private ArrayList<ArrayList<Integer>> paisktabel;
+    // topelt array, sest peab saama teha ka ahelpaiskamist
 
-    public void makePaisktabel(int len) {
-        this.paisktabel = new Integer[len];
-    }
-
-    public void delPaisktabel() {
-        this.paisktabel = null;
-    }
-
-
-    public Integer[] getPaisktabel() {
-        return paisktabel;
+    public Paisktabel(int len) {
+        this.paisktabel = new ArrayList<>();
+        for (int i = 0; i < len; i++) {
+            this.paisktabel.add(new ArrayList<>());
+        }
     }
 
     public void sisesta(int i, Integer x) {
-        paisktabel[i] = x;
+        paisktabel.get(i).add(x);
     }
 
-    public void eemalda(int i) {
-        paisktabel[i] = null;
+    public void eemalda(int i, int x) {
+        paisktabel.get(i).remove((Integer) x);
     }
 
     public int leiaVabaKoht(int arv) {
-        int index = arv % paisktabel.length;
-        while (paisktabel[index] != null) {
+        int voti = arv % paisktabel.size();
+        int index = voti;
+        while (paisktabel.get(index).size() > 0) {
             index++;
-            if (index == paisktabel.length) {
+            if (index == paisktabel.size()) {
                 index = 0;
             }
-            if (index == arv % paisktabel.length) {
+            if (index == voti) {
                 return -1;
             }
         }
@@ -38,14 +35,14 @@ public class Paisktabel {
     }
 
     public int leiaArvuIndex(Integer eemaldatav) {
-        int key = eemaldatav % paisktabel.length;
+        int key = eemaldatav % paisktabel.size();
         int index = key;
-        while (paisktabel[index] != eemaldatav) {
+        while (!paisktabel.get(index).contains(eemaldatav)) {
             index++;
-            if (index == paisktabel.length) {
+            if (index == paisktabel.size()) {
                 index = 0;
             }
-            if (index == key || paisktabel[index] == null) {
+            if (index == key || paisktabel.get(index) == null) {
                 return -1;
             }
         }
@@ -56,17 +53,12 @@ public class Paisktabel {
 
     @Override
     public String toString() {
-        String str = "";
-        for (int i = 0; i < paisktabel.length; i++) {
-            str += " | " + i;
+        String str = " ";
+
+        for (int i = 0; i < paisktabel.size(); i++) {
+
+            str +=  i + ": " + paisktabel.get(i).toString() + "\n";
         }
-        str += " |\n [ ";
-        for (Integer el : paisktabel) {
-            if (el == null) str += "_";
-            else str += el;
-            str += " ; ";
-        }
-        str += "]";
         return str;
     }
 
