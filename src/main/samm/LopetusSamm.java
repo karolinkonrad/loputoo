@@ -1,4 +1,6 @@
+package main.samm;
 
+import main.Labimang;
 
 public class LopetusSamm extends Samm {
     // kuidagi seotud hindamisega

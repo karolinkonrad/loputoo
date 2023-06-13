@@ -1,3 +1,7 @@
+package main.samm;
+
+import main.Labimang;
+
 import java.util.Objects;
 
 public class PaisktabeliLoomisSamm extends Samm {
@@ -10,12 +14,12 @@ public class PaisktabeliLoomisSamm extends Samm {
 
     @Override
     public void astu() {
-        labimang.getPaisktabelid().add(0, new Paisktabel(paisktabeliPikkus));
+        labimang.getPaisktabel().looPaisktabel(paisktabeliPikkus);
     }
 
     @Override
     public void tagasi() {
-        labimang.getPaisktabelid().remove(0);
+        labimang.getPaisktabel().hävitaPaisktabel();
     }
 
     @Override

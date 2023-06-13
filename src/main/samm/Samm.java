@@ -1,3 +1,6 @@
+package main.samm;
+
+import main.Labimang;
 
 public abstract class Samm{
     Labimang labimang;
