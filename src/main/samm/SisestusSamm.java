@@ -23,9 +23,10 @@ public class SisestusSamm extends Samm {
     }
 
     @Override
-    public void tagasi() {
+    public boolean tagasi() {
         labimang.getPaisktabel().eemalda(koht, arv);
         labimang.getSisend().add(kohtSisendis, arv);
+        return true;
     }
 
     @Override

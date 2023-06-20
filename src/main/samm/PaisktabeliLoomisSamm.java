@@ -18,8 +18,9 @@ public class PaisktabeliLoomisSamm extends Samm {
     }
 
     @Override
-    public void tagasi() {
+    public boolean tagasi() {
         labimang.getPaisktabel().hävitaPaisktabel();
+        return true;
     }
 
     @Override

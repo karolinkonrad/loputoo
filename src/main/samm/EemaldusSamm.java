@@ -21,9 +21,10 @@ public class EemaldusSamm extends Samm {
     }
 
     @Override
-    public void tagasi() {
+    public boolean tagasi() {
         labimang.getPaisktabel().sisesta(koht, arv);
         labimang.getSisend().remove((Integer) arv);
+        return true;
     }
 
     @Override

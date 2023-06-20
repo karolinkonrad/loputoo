@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         Ylesanne yl = null;
-        Labimang labimang = null;
+        Labimang labimang;
         Scanner sc = new Scanner(System.in);
         boolean alusta = true;
         String[] userCommand;
@@ -77,12 +77,12 @@ public class Main {
             }
 
             System.out.println("-----------------------------------------------------------");
-            System.out.println("abimasiiv: " + labimang.getSisend().toString());
+            System.out.println("massiiv: " + labimang.getSisend().toString());
             System.out.println("paisktabel: \n" + labimang.getPaisktabel().toString());
             System.out.println("""
                     l - algoritm lõpetab
                     s <x> <i> sisesta x indeksile i
-                    e <i> <x> kustuta indexilt i arv x
+                    e <i> <x> eemalda indexilt i arv x
                     u võta samm tagasi""");
 
             userCommand = sc.nextLine().split(" ");
@@ -98,12 +98,13 @@ public class Main {
                     case "s":
                         labimang.astu(new SisestusSamm(labimang, Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[1])));
                         break;
-                    // e <i> <x> kustuta indexilt i arv x
+                    // e <i> <x> eemalda indexilt i arv x
                     case "e":
                         labimang.astu(new EemaldusSamm(labimang, Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2])));
                         break;
                     // u võta samm tagasi
                     case "u":
+                        // true kui sammude ajalugu saab tühjaks. küsitakse uuesti paisktabeli parameetreid
                         alusta = labimang.tagasi();
                         break;
                 }

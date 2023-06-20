@@ -10,7 +10,7 @@ public abstract class Samm{
     }
 
     abstract public void astu();
-    abstract public void tagasi();
+    abstract public boolean tagasi();
 
     public abstract boolean equals(Object o);
 }

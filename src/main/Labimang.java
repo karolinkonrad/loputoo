@@ -11,26 +11,31 @@ public class Labimang {
     private ArrayList<Integer> sisend;
     private Ylesanne ylesanne;
     private Stack<Samm> sammud;
+    private Stack<Integer> hinnangud;
+    private float hinne;
 
 
     public Labimang(Ylesanne ylesanne) {
-        this.paisktabel = ylesanne.getPaisktabel();
-        this.sisend = ylesanne.ylSisend();
+        this.paisktabel = ylesanne.algusPaisktabel();
+        this.sisend = ylesanne.algusMassiiv();
         this.ylesanne = ylesanne;
         this.sammud = new Stack<>();
-        }
+        this.hinnangud = new Stack<>();
+    }
 
     public void astu(Samm samm) {
-        int hinnang = ylesanne.hinda(this, samm);
-        ylesanne.astu(hinnang);
+        int hinnang = ylesanne.hindaSammu(this, samm);
+        hinnangud.push(hinnang);
         sammud.push(samm);
         samm.astu();
     }
 
     public boolean tagasi() {
-        ylesanne.tagasi();
         Samm samm = sammud.pop();
-        samm.tagasi();
+        if (samm.tagasi())
+            hinnangud.pop();
+        else
+            sammud.push(samm);
 
         if (sammud.isEmpty()) return true;
         return false;
@@ -44,19 +49,16 @@ public class Labimang {
         return sisend;
     }
 
-    public float getHinne() {
-        Stack<Integer> hinnangud = ylesanne.getHinnangud();
-        float punktideSumma = 0.0f;
-        int maxPunktid = hinnangud.size();
-
-        while (!hinnangud.isEmpty()) {
-            int hinnang = hinnangud.pop();
-            if (hinnang > 0) {
-                punktideSumma += 1;
-            }
-        }
-        return punktideSumma / maxPunktid * 100.0f;
+    public Stack<Integer> getHinnangud() {
+        return hinnangud;
     }
 
+    public void lõpeta() {
+        hinne = ylesanne.arvutaHinne(this);
+    }
+
+    public float getHinne() {
+        return hinne;
+    }
 }
 

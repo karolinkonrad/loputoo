@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 
 public class LisamiseYlesanne extends Ylesanne {
 
@@ -41,28 +42,12 @@ public class LisamiseYlesanne extends Ylesanne {
     }
 
     @Override
-    public ArrayList<Integer> ylSisend() {
-        return (ArrayList<Integer>) super.getSisend().clone();
-    }
-
-    @Override
-    public Paisktabel getPaisktabel() {
-        return new Paisktabel();
-    }
-
-    @Override
     public String ylesandeKirjeldus() {
-        return "Lisa lahtise adresseerimisega paisktabelisse järgmised kirjed: " + super.getSisend().toString();
-    }
-
-
-    @Override
-    public void paisktabeliParameetrid(int a, int b, int m) {
-
+        return "Lisa lahtise adresseerimisega paisktabelisse samas järjekorras järgmised kirjed: " + super.getSisend().toString();
     }
 
     @Override
-    public Integer hinda(Labimang labimang, Samm samm) {
+    public Integer hindaSammu(Labimang labimang, Samm samm) {
         // tagastab vea tüübi
 
         Samm õigeSamm = new LopetusSamm(labimang);
@@ -88,6 +73,21 @@ public class LisamiseYlesanne extends Ylesanne {
         }
         // algoritm lõpetab
         return õigeSamm.equals(samm) ? 4: -4;
+    }
+
+    @Override
+    public float arvutaHinne(Labimang labimang) {
+        Stack<Integer> hinnangud = labimang.getHinnangud();
+        float punktideSumma = 0.0f;
+        int maxPunktid = hinnangud.size();
+
+        while (!hinnangud.isEmpty()) {
+            int hinnang = hinnangud.pop();
+            if (hinnang > 0) {
+                punktideSumma += 1;
+            }
+        }
+        return punktideSumma / maxPunktid * 100.0f;
     }
 
 }

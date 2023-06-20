@@ -2,6 +2,8 @@ package main.samm;
 
 import main.Labimang;
 
+import java.util.Stack;
+
 public class LopetusSamm extends Samm {
     // kuidagi seotud hindamisega
 
@@ -12,13 +14,14 @@ public class LopetusSamm extends Samm {
 
     @Override
     public void astu() {
-
+        labimang.lõpeta();
     }
 
     @Override
-    public void tagasi() {
-
+    public boolean tagasi() {
+        return false;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
