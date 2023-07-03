@@ -1,24 +1,17 @@
 package main.samm;
 
-import main.Labimang;
-
-import java.util.Stack;
+import main.ylesanne.Ylesanne;
 
 public class LopetusSamm extends Samm {
     // kuidagi seotud hindamisega
 
-
-    public LopetusSamm(Labimang labimang) {
-        super(labimang);
+    @Override
+    public void astu(Ylesanne ylesanne) {
+        ylesanne.lõpeta();
     }
 
     @Override
-    public void astu() {
-        labimang.lõpeta();
-    }
-
-    @Override
-    public boolean tagasi() {
+    public boolean tagasi(Ylesanne ylesanne) {
         return false;
     }
 

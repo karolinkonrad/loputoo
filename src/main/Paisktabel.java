@@ -2,33 +2,36 @@ package main;
 
 import java.util.ArrayList;
 
-public class Paisktabel {
-    private ArrayList<ArrayList<Integer>> paisktabel;
+public class Paisktabel<T> {
+
+    private int kompesamm;
+    private ArrayList<ArrayList<T>> tabel;
     // topelt array, sest peab saama teha ka ahelpaiskamist
 
-    public Paisktabel() {
-        this.paisktabel = new ArrayList<>();
-
+    public Paisktabel(int kompesamm) {
+        this.kompesamm = kompesamm;
+        this.tabel = new ArrayList<>();
     }
+
     public void looPaisktabel(int len) {
         for (int i = 0; i < len; i++) {
-            this.paisktabel.add(new ArrayList<>());
+            this.tabel.add(new ArrayList<>());
         }
     }
 
     public void hävitaPaisktabel() {
-        this.paisktabel = new ArrayList<>();
+        this.tabel = new ArrayList<>();
     }
 
-    public boolean sisesta(int i, Integer x) {
-        paisktabel.get(i).add(x);
+    public boolean sisesta(int v, int k, T elem) {
+        tabel.get(v).add(k, elem);
         return true;
     }
 
-    public boolean eemalda(int i, int x) {
-        ArrayList<Integer> ahel = paisktabel.get(i);
-        if (ahel.contains(x)) {
-            ahel.remove((Integer) x);
+    public boolean eemalda(int v, int k) {
+        ArrayList<T> ahel = tabel.get(v);
+        if (ahel.size() > 0) {
+            ahel.remove(k);
             return true;
         }
         return false;
@@ -36,10 +39,10 @@ public class Paisktabel {
 
     public int leiaVabaKoht(int voti) {
         int index = voti;
-        while (paisktabel.get(index).size() > 0) {
-            index++;
-            if (index == paisktabel.size()) {
-                index = 0;
+        while (tabel.get(index).size() > 0) {
+            index += kompesamm;
+            if (index >= tabel.size()) {
+                index -= tabel.size();
             }
             if (index == voti) {
                 return -1;
@@ -48,14 +51,14 @@ public class Paisktabel {
         return index;
     }
 
-    public int leiaArvuIndex(Integer eemaldatav, int voti) {
+    public int leiaAsukoht(T element, int voti) {
         int index = voti;
-        while (!paisktabel.get(index).contains(eemaldatav)) {
-            index++;
-            if (index == paisktabel.size()) {
-                index = 0;
+        while (!tabel.get(index).contains(element)) {
+            index += kompesamm;
+            if (index >= tabel.size()) {
+                index -= tabel.size();
             }
-            if (index == voti || paisktabel.get(index) == null) {
+            if (index == voti || tabel.get(index) == null) {
                 return -1;
             }
         }
@@ -63,18 +66,28 @@ public class Paisktabel {
     }
 
     public int size() {
-        return paisktabel.size();
+        return tabel.size();
     }
 
     @Override
     public String toString() {
         String str = " ";
 
-        for (int i = 0; i < paisktabel.size(); i++) {
+        for (int i = 0; i < tabel.size(); i++) {
 
-            str += i + ": " + paisktabel.get(i).toString() + "\n";
+            str += i + ": " + tabel.get(i).toString() + "\n";
         }
         return str;
     }
+
+    public T get(int v, int k) {
+        ArrayList<T> jada = tabel.get(v);
+        if (jada.size() == 0) return null;
+        return jada.get(k);
+    }
+    public ArrayList<T> get(int v) {
+        return tabel.get(v);
+    }
+
 
 }

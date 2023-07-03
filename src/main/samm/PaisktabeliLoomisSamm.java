@@ -1,25 +1,37 @@
 package main.samm;
 
-import main.Labimang;
+import main.ylesanne.Ylesanne;
 
 import java.util.Objects;
 
 public class PaisktabeliLoomisSamm extends Samm {
+    float minElement;
+    float maxElement;
     int paisktabeliPikkus;
 
-    public PaisktabeliLoomisSamm(Labimang labimang, int paisktabeliPikkus) {
-        super(labimang);
+    public PaisktabeliLoomisSamm(int paisktabeliPikkus) {
+        super();
+        this.minElement = 0;
+        this.maxElement = 0;
+        this.paisktabeliPikkus = paisktabeliPikkus;
+    }
+
+    public PaisktabeliLoomisSamm(float minElement, float maxElement, int paisktabeliPikkus) {
+        super();
+        this.minElement = minElement;
+        this.maxElement = maxElement;
         this.paisktabeliPikkus = paisktabeliPikkus;
     }
 
     @Override
-    public void astu() {
-        labimang.getPaisktabel().looPaisktabel(paisktabeliPikkus);
+    public void astu(Ylesanne ylesanne) {
+        ylesanne.paisktabeliParameetrid(minElement, maxElement, paisktabeliPikkus);
+        ylesanne.getPaisktabel().looPaisktabel(paisktabeliPikkus);
     }
 
     @Override
-    public boolean tagasi() {
-        labimang.getPaisktabel().hävitaPaisktabel();
+    public boolean tagasi(Ylesanne ylesanne) {
+        ylesanne.getPaisktabel().hävitaPaisktabel();
         return true;
     }
 

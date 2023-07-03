@@ -15,7 +15,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         Ylesanne yl = null;
-        Labimang labimang;
         Scanner sc = new Scanner(System.in);
         boolean alusta = true;
         String[] userCommand;
@@ -32,19 +31,18 @@ public class Main {
 
         switch (ylesandetüüp) {
             case "l":
-                yl = new LisamiseYlesanne();
+                yl = new LisamiseYlesanne(System.getProperty("user.dir") + "/sisendid/lisamineEemaldamine/sisend.txt");
                 break;
             case "e":
-                yl = new EemaldamiseYlesanne();
+                yl = new EemaldamiseYlesanne( System.getProperty("user.dir") + "/sisendid/lisamineEemaldamine/sisend.txt");
                 break;
             case "k":
-                yl = new KimbuYlesanne();
+                yl = new KimbuYlesanne(System.getProperty("user.dir") + "/sisendid/kimbumeetod/sisend.txt");
                 break;
             case "p":
-                yl = new PositsiooniYlesanne();
+                yl = new PositsiooniYlesanne(System.getProperty("user.dir") + "/sisendid/positsioonimeetod/sisend.txt");
         }
 
-        labimang = new Labimang(yl);
         System.out.println(yl.ylesandeKirjeldus());
 
         while (true){
@@ -53,23 +51,22 @@ public class Main {
                 while (true) {
                     try {
                         switch (ylesandetüüp) {
-                            case "e":
+                            case "p":
+                                System.out.print("Sisesta paisktabeli pikkus: ");
+                                userCommand = sc.nextLine().split(" ");
+                                yl.astu(new PaisktabeliLoomisSamm(Integer.parseInt(userCommand[0])));
                                 break;
                             case "k":
                                 System.out.print("Sisesta a b m (eraldatud tühikutega): ");
                                 userCommand = sc.nextLine().split(" ");
-                                yl.paisktabeliParameetrid(Integer.parseInt(userCommand[0]), Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]));
-                                labimang.astu(new PaisktabeliLoomisSamm(labimang, Integer.parseInt(userCommand[2])));
+                                yl.astu(new PaisktabeliLoomisSamm(Float.valueOf(userCommand[0]), Float.valueOf(userCommand[1]), Integer.parseInt(userCommand[2])));
                                 break;
                             default:
-                                System.out.print("Sisesta paisktabeli pikkus: ");
-                                userCommand = sc.nextLine().split(" ");
-                                labimang.astu(new PaisktabeliLoomisSamm(labimang, Integer.parseInt(userCommand[0])));
 
                         }
                         break;
-                    }catch (RuntimeException e) {
-                        System.out.println(e);
+                    }catch (IllegalArgumentException e) {
+                        throw e;
                     }
                 }
 
@@ -77,12 +74,12 @@ public class Main {
             }
 
             System.out.println("-----------------------------------------------------------");
-            System.out.println("massiiv: " + labimang.getSisend().toString());
-            System.out.println("paisktabel: \n" + labimang.getPaisktabel().toString());
+            System.out.println("massiiv: " + yl.getAbiMassiiv().toString());
+            System.out.println("paisktabel: \n" + yl.getPaisktabel().toString());
             System.out.println("""
                     l - algoritm lõpetab
-                    s <x> <i> sisesta x indeksile i
-                    e <i> <x> eemalda indexilt i arv x
+                    s <i> <v> sisesta element massiivist indeksilt i paisktabelisse võtmele v 
+                    e <i> <v> eemalda paisktabelist võtmelt v element ja pane see massiivi indeksile i
                     u võta samm tagasi""");
 
             userCommand = sc.nextLine().split(" ");
@@ -91,25 +88,35 @@ public class Main {
                 switch (userCommand[0]) {
                     // l algoritm lõpetab
                     case "l":
-                        labimang.astu(new LopetusSamm(labimang));
-                        System.out.println("Hinne:" + labimang.getHinne());
+                        yl.astu(new LopetusSamm());
+                        System.out.println("Hinne: " + yl.getHinne() + "%");
                         return;
-                    // s <x> <i> sisesta x indeksile i
+
+                    // s <i> <v> sisesta element massiivist indeksilt i paisktabelisse võtmele v
                     case "s":
-                        labimang.astu(new SisestusSamm(labimang, Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[1])));
+                        if (userCommand.length > 3)
+                            yl.astu(new SisestusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[3])));
+                        else
+                            yl.astu(new SisestusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), 0));
                         break;
-                    // e <i> <x> eemalda indexilt i arv x
+
+                    // e <i> <v> eemalda paisktabelist võtmelt v element ja pane see massiivi indeksile i
                     case "e":
-                        labimang.astu(new EemaldusSamm(labimang, Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2])));
+                        if (userCommand.length > 3)
+                            yl.astu(new EemaldusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[3])));
+                        else
+                            yl.astu(new EemaldusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), 0));
                         break;
+
                     // u võta samm tagasi
                     case "u":
-                        // true kui sammude ajalugu saab tühjaks. küsitakse uuesti paisktabeli parameetreid
-                        alusta = labimang.tagasi();
+                        // true kui sammude ajalugu saab tühjaks. küsitakse uuesti paisktabeli parameetreid kui vaja
+                        alusta = yl.tagasi();
                         break;
                 }
             }catch (RuntimeException e) {
-                System.out.println(e);
+                throw e;
+                //System.out.println(e);
             }
         }
     }

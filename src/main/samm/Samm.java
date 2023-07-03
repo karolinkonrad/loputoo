@@ -1,16 +1,12 @@
 package main.samm;
 
-import main.Labimang;
+
+import main.ylesanne.Ylesanne;
 
 public abstract class Samm{
-    Labimang labimang;
 
-    public Samm(Labimang labimang) {
-        this.labimang = labimang;
-    }
-
-    abstract public void astu();
-    abstract public boolean tagasi();
+    abstract public void astu(Ylesanne ylesanne);
+    abstract public boolean tagasi(Ylesanne ylesanne);
 
     public abstract boolean equals(Object o);
 }

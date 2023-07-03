@@ -1,31 +1,33 @@
 package main.samm;
 
-import main.Labimang;
+import main.ylesanne.Ylesanne;
 
 import java.util.Objects;
 
-public class SisestusSamm extends Samm {
-    private int koht;
-    private int arv;
-    private int kohtSisendis;
+public class SisestusSamm<T> extends Samm {
+    private int index; //indeks abimassiivis
+    private int voti; //võti paisktabelis
+    private int koht; //koht ahelas
+    private T element;
 
-    public SisestusSamm(Labimang labimang, int koht, int arv) {
-        super(labimang);
+    public SisestusSamm(int index, int voti, int koht) {
+        super();
+        this.index = index;
+        this.voti = voti;
         this.koht = koht;
-        this.arv = arv;
     }
 
     @Override
-    public void astu() {
-        labimang.getPaisktabel().sisesta(koht, arv);
-        kohtSisendis = labimang.getSisend().indexOf(arv);
-        labimang.getSisend().remove(kohtSisendis);
+    public void astu(Ylesanne ylesanne) {
+        element = (T) ylesanne.getAbiMassiiv().get(index);
+        ylesanne.getPaisktabel().sisesta(voti, koht, element);
+        ylesanne.getAbiMassiiv().remove(index);
     }
 
     @Override
-    public boolean tagasi() {
-        labimang.getPaisktabel().eemalda(koht, arv);
-        labimang.getSisend().add(kohtSisendis, arv);
+    public boolean tagasi(Ylesanne ylesanne) {
+        ylesanne.getPaisktabel().eemalda(voti, koht);
+        ylesanne.getAbiMassiiv().add(index, element);
         return true;
     }
 
@@ -34,11 +36,11 @@ public class SisestusSamm extends Samm {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SisestusSamm that = (SisestusSamm) o;
-        return koht == that.koht && arv == that.arv && kohtSisendis == that.kohtSisendis;
+        return index == that.index && voti == that.voti && koht == that.koht && element == that.element;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(koht, arv, kohtSisendis);
+        return Objects.hash(index, voti, koht, element);
     }
 }
