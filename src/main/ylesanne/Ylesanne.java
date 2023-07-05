@@ -1,8 +1,10 @@
 package main.ylesanne;
 
+import main.Logija;
 import main.Paisktabel;
 import main.samm.Samm;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -21,15 +23,16 @@ public abstract class Ylesanne<T> {
     private ArrayList<Integer> õigedTüübid;
 
     private Stack<Samm> sammud;
-    private Stack<Integer> sammuTüübid;
+    private Stack<Integer> hinnangud;
 
     private float hinne;
 
+    Logija logija;
 
-
-    public Ylesanne() {
+    public Ylesanne() throws IOException {
         this.sammud = new Stack<>();
-        this.sammuTüübid = new Stack<>();
+        this.hinnangud = new Stack<>();
+        this.logija = new Logija();
     }
 
 
@@ -37,6 +40,9 @@ public abstract class Ylesanne<T> {
         this.ylesanne = ylesanne;
         this.paisktabel = paisktabel;
         this.abiMassiiv = abiMassiiv;
+
+        logija.logi(ylesanne.ylesandeKirjeldus());
+
     }
 
     public void setÕigedTüübid(ArrayList<Integer> õigedTüübid) {
@@ -57,19 +63,29 @@ public abstract class Ylesanne<T> {
     public void astu(Samm samm) {
         int hinnang = ylesanne.hindaSammu(samm);
         ylesanne.astuJärg(hinnang);
-        sammuTüübid.push(hinnang);
+        hinnangud.push(hinnang);
         sammud.push(samm);
-        samm.astu(this);
 
+        logija.logi("---------------------------------------------------------\n"
+                + abiMassiiv.toString() + "\n"
+                + paisktabel.toString() + "\n>"
+                + samm.toString()+ "\n" +
+                hinnang );
+
+        samm.astu(this);
     }
 
     public boolean tagasi() {
+
         if (sammud.isEmpty()) return true;
 
         Samm samm = sammud.pop();
         if (samm.tagasi(this)) {
-            int hinnang = sammuTüübid.pop();
+            int hinnang = hinnangud.pop();
             ylesanne.tagasiJärg(hinnang);
+            logija.logi("---------------------------------------------------------\n"
+                    + abiMassiiv.toString() + "\n"
+                    + paisktabel.toString() + "\ntagasi");
         }
         else
             sammud.push(samm);
@@ -83,24 +99,28 @@ public abstract class Ylesanne<T> {
 
     public void lõpeta() {
         hinne = ylesanne.arvutaHinne();
+        logija.logi("###########################\nHinne: " + hinne + "%\n"
+        + õigedTüübid.toString());
     }
+
     public float getHinne() {
         return hinne;
     }
-    public int räsi(int arv) {return arv % paisktabel.size();}
+    public int paiskfunktsioon(int arv) {return arv % paisktabel.size();}
 
     abstract public String ylesandeKirjeldus();
-    abstract public Integer hindaSammu(Samm samm);
+    abstract public int hindaSammu(Samm samm);
 
     public float arvutaHinne() {
-        Stack<Integer> hinnangud = sammuTüübid;
+        Stack<Integer> hinnangud = this.hinnangud;
 
         float punktideSumma = 0f;
         int maxPunktid = õigedTüübid.size();
 
         while (!hinnangud.isEmpty()) {
             int hinnang = hinnangud.pop();
-            punktideSumma += 1;
+            if (hinnang > 0)
+                punktideSumma += 1;
         }
         return punktideSumma / maxPunktid * 100.0f;
     }

@@ -9,5 +9,7 @@ public abstract class Samm{
     abstract public boolean tagasi(Ylesanne ylesanne);
 
     public abstract boolean equals(Object o);
+
+    public abstract String toString();
 }
 

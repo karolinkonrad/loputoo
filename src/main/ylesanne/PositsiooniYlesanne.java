@@ -36,7 +36,7 @@ public class PositsiooniYlesanne extends Ylesanne {
 
             for (int arv : sisend) {
 
-                int voti = räsi(arv);
+                int voti = paiskfunktsioon(arv);
                 int i = p.get(voti).size();
 
                 p.sisesta(voti, i, arv);
@@ -85,7 +85,7 @@ public class PositsiooniYlesanne extends Ylesanne {
         return sisend;
     }
 
-    public int räsi(int arv) {
+    public int paiskfunktsioon(int arv) {
         return (int) (arv / Math.pow(10, järk)) % 10;
     }
 
@@ -117,7 +117,7 @@ public class PositsiooniYlesanne extends Ylesanne {
     }
 
     @Override
-    public Integer hindaSammu(Samm samm) {
+    public int hindaSammu(Samm samm) {
         Samm õigeSamm = new LopetusSamm();
 
 
@@ -132,7 +132,7 @@ public class PositsiooniYlesanne extends Ylesanne {
             if (abiMassiiv.size() > 0 && sisestamine) {
                 int arv = (int) abiMassiiv.get(0);
 
-                int voti = räsi(arv);
+                int voti = paiskfunktsioon(arv);
                 int koht = paisktabel.get(voti).size();
 
                 õigeSamm = new SisestusSamm(0, voti, koht);

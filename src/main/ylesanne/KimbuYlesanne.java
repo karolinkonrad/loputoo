@@ -38,7 +38,7 @@ public class KimbuYlesanne extends Ylesanne {
         õigedTüübid.add(TABELIOP);
 
         for (Float arv : sisend) {
-            int voti = räsi(arv);
+            int voti = paiskfunktsioon(arv);
 
             int i;
             for (i = 0; i < p.get(voti).size(); i++) {
@@ -85,7 +85,7 @@ public class KimbuYlesanne extends Ylesanne {
         return sisend;
     }
 
-    public int räsi(float arv) {
+    public int paiskfunktsioon(float arv) {
         return (int) Math.floor((arv-minElem) / (Math.ceil(maxElem)-minElem) * elementideArv);
     }
 
@@ -112,7 +112,7 @@ public class KimbuYlesanne extends Ylesanne {
     }
 
     @Override
-    public Integer hindaSammu(Samm samm) {
+    public int hindaSammu(Samm samm) {
         // tagastab vea tüübi
 
         Samm õigeSamm = new LopetusSamm();
@@ -125,7 +125,7 @@ public class KimbuYlesanne extends Ylesanne {
         if (abiMassiiv.size() > 0 && järg == 0) { // veel on lisamata kirjeid
             float arv = (float) abiMassiiv.get(0);
 
-            int voti = räsi(arv);
+            int voti = paiskfunktsioon(arv);
             int i;
             for (i = 0; i < paisktabel.get(voti).size(); i++) {
                 if (arv <= (float) paisktabel.get(voti, i)) break;

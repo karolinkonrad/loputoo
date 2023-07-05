@@ -23,13 +23,13 @@ public class Paisktabel<T> {
         this.tabel = new ArrayList<>();
     }
 
-    public boolean sisesta(int v, int k, T elem) {
-        tabel.get(v).add(k, elem);
+    public boolean sisesta(int r, int k, T elem) {
+        tabel.get(r).add(k, elem);
         return true;
     }
 
-    public boolean eemalda(int v, int k) {
-        ArrayList<T> ahel = tabel.get(v);
+    public boolean eemalda(int r, int k) {
+        ArrayList<T> ahel = tabel.get(r);
         if (ahel.size() > 0) {
             ahel.remove(k);
             return true;
@@ -37,28 +37,28 @@ public class Paisktabel<T> {
         return false;
     }
 
-    public int leiaVabaKoht(int voti) {
-        int index = voti;
+    public int leiaVabaKoht(int räsi) {
+        int index = räsi;
         while (tabel.get(index).size() > 0) {
             index += kompesamm;
             if (index >= tabel.size()) {
                 index -= tabel.size();
             }
-            if (index == voti) {
+            if (index == räsi) {
                 return -1;
             }
         }
         return index;
     }
 
-    public int leiaAsukoht(T element, int voti) {
-        int index = voti;
+    public int leiaAsukoht(T element, int räsi) {
+        int index = räsi;
         while (!tabel.get(index).contains(element)) {
             index += kompesamm;
             if (index >= tabel.size()) {
                 index -= tabel.size();
             }
-            if (index == voti || tabel.get(index) == null) {
+            if (index == räsi || tabel.get(index) == null) {
                 return -1;
             }
         }
@@ -71,22 +71,22 @@ public class Paisktabel<T> {
 
     @Override
     public String toString() {
-        String str = " ";
+        String str = "paisktabel: ";
 
         for (int i = 0; i < tabel.size(); i++) {
 
-            str += i + ": " + tabel.get(i).toString() + "\n";
+            str += i + ":" + tabel.get(i).toString() + " ";
         }
         return str;
     }
 
-    public T get(int v, int k) {
-        ArrayList<T> jada = tabel.get(v);
+    public T get(int r, int k) {
+        ArrayList<T> jada = tabel.get(r);
         if (jada.size() == 0) return null;
         return jada.get(k);
     }
-    public ArrayList<T> get(int v) {
-        return tabel.get(v);
+    public ArrayList<T> get(int r) {
+        return tabel.get(r);
     }
 
 

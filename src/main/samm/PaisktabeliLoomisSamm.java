@@ -44,6 +44,11 @@ public class PaisktabeliLoomisSamm extends Samm {
     }
 
     @Override
+    public String toString() {
+        return "Uus paisktabel: minElement=" + minElement + "; maxElement=" + maxElement + "; pikkus=" + paisktabeliPikkus;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(paisktabeliPikkus);
     }

@@ -30,7 +30,7 @@ public class LisamiseYlesanne extends Ylesanne {
         ArrayList<Integer> õigedTüübid = new ArrayList<>();
 
         for (Integer arv : sisend) {
-            int voti = räsi(arv);
+            int voti = paiskfunktsioon(arv);
             int koht = p.leiaVabaKoht(voti);
 
             if (voti != koht)
@@ -39,6 +39,8 @@ public class LisamiseYlesanne extends Ylesanne {
 
             p.sisesta(koht, 0, arv);
         }
+
+        õigedTüübid.add(LÕPP);
 
         setÕigedTüübid(õigedTüübid);
     }
@@ -68,7 +70,7 @@ public class LisamiseYlesanne extends Ylesanne {
     }
 
     @Override
-    public Integer hindaSammu(Samm samm) {
+    public int hindaSammu(Samm samm) {
         // tagastab vea tüübi
 
         Samm õigeSamm = new LopetusSamm();
@@ -76,11 +78,11 @@ public class LisamiseYlesanne extends Ylesanne {
         if (abiMassiiv.size() > 0) { // veel on lisamata kirjeid
             int arv = (int) abiMassiiv.get(0);
 
-            int voti = räsi(arv);
-            int koht = paisktabel.leiaVabaKoht(voti);
-            õigeSamm = new SisestusSamm(koht, arv, 0);
+            int voti = paiskfunktsioon(arv);
+            int vabaVoti = paisktabel.leiaVabaKoht(voti);
+            õigeSamm = new SisestusSamm(0, vabaVoti, 0);
 
-            if (koht == voti) { // nihutamisi ei tehta
+            if (vabaVoti == voti) { // nihutamisi ei tehta
                 return õigeSamm.equals(samm) ? LISAMINE: -LISAMINE;
             }
             else

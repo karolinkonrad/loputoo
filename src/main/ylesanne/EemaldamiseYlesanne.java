@@ -16,7 +16,7 @@ import java.util.Random;
 public class EemaldamiseYlesanne extends Ylesanne{
 
     private int eemaldatav;
-    private int eemaldatavaIndex;
+    private int eemaldatavaRäsi;
     HashMap<Integer, Integer> kompejadaAlgsedIndeksid;
     private int järg;
 
@@ -30,7 +30,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
         super.määra(this, paisktabel, new ArrayList<>());
 
         for (Integer arv : sisend) {
-            paisktabel.sisesta( paisktabel.leiaVabaKoht(räsi(arv)), 0, arv);
+            paisktabel.sisesta( paisktabel.leiaVabaKoht(paiskfunktsioon(arv)), 0, arv);
         }
 
         // õige läbimängu sammude leidmine
@@ -39,22 +39,22 @@ public class EemaldamiseYlesanne extends Ylesanne{
         p.looPaisktabel(sisend.size());
 
         for (Integer arv : sisend) {
-            p.sisesta( p.leiaVabaKoht(räsi(arv)),0, arv);
+            p.sisesta( p.leiaVabaKoht(paiskfunktsioon(arv)),0, arv);
         }
 
         kompejadaAlgsedIndeksid = new HashMap<>();
         ArrayList<Integer> õigedTüübid = new ArrayList<>();
 
-        eemaldatavaIndex = p.leiaAsukoht(eemaldatav, räsi(eemaldatav));
-        p.eemalda(eemaldatavaIndex, eemaldatav);
+        eemaldatavaRäsi = p.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav));
+        p.eemalda(eemaldatavaRäsi, 0);
         õigedTüübid.add(KUSTUTAMINE);
 
-        int i = eemaldatavaIndex;
+        int i = eemaldatavaRäsi;
 
         while (true){ // kompejada läbimine
             i++;
             if (i >= p.size()) i = 0;
-            if (i == eemaldatavaIndex) break;
+            if (i == eemaldatavaRäsi) break;
             if (p.get(i, 0) == null) break;
 
             int arv = (int) p.get(i, 0);
@@ -62,7 +62,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
             p.eemalda(i, 0);
             õigedTüübid.add(EEMALDAMINE);
 
-            int uusKoht = p.leiaVabaKoht(räsi(arv));
+            int uusKoht = p.leiaVabaKoht(paiskfunktsioon(arv));
             if (uusKoht != i)
                 õigedTüübid.add(RASKEOP);
             else õigedTüübid.add(LISAMINE);
@@ -97,12 +97,14 @@ public class EemaldamiseYlesanne extends Ylesanne{
 
     @Override
     protected void astuJärg(int hinnang) {
-        if (hinnang == EEMALDAMINE) järg++;
+        if (hinnang == EEMALDAMINE || hinnang == KUSTUTAMINE)
+            järg++;
     }
 
     @Override
     protected void tagasiJärg(int hinnang) {
-        if (hinnang == EEMALDAMINE) järg--;
+        if (hinnang == EEMALDAMINE || hinnang == KUSTUTAMINE)
+            järg--;
     }
 
     @Override
@@ -111,7 +113,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
     }
 
     @Override
-    public Integer hindaSammu(Samm samm) {
+    public int hindaSammu(Samm samm) {
         // tagastab vea tüübi
 
         // if eemaldatav on eemaldatud
@@ -122,7 +124,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
 
 
         if (abiMassiiv.size() == 0) { // kas eemaldatav on eemaldatud?
-            int eemaldatavaVõti = paisktabel.leiaAsukoht(eemaldatav, räsi(eemaldatav));
+            int eemaldatavaVõti = paisktabel.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav));
             õigeSamm = new EemaldusSamm(0, eemaldatavaVõti, 0);
 
             return õigeSamm.equals(samm) ? KUSTUTAMINE: -KUSTUTAMINE;
@@ -132,12 +134,12 @@ public class EemaldamiseYlesanne extends Ylesanne{
 
         if (abiMassiiv.size() > 1) { // kas on kirjeid tagasi panna?
             int arv = (int) abiMassiiv.get(0);
-            int voti = räsi(arv);
-            int koht = paisktabel.leiaVabaKoht(voti);
+            int voti = paiskfunktsioon(arv);
+            int vabaVoti = paisktabel.leiaVabaKoht(voti);
 
-            õigeSamm = new SisestusSamm(0, koht, 0);
+            õigeSamm = new SisestusSamm(0, vabaVoti, 0);
 
-            if (koht != kompejadaAlgsedIndeksid.get(arv)) { // kas uus koht on erinev vanast kohast?
+            if (vabaVoti != kompejadaAlgsedIndeksid.get(arv)) { // kas uus vabaVoti on erinev vanast võtmest?
                 return õigeSamm.equals(samm) ? RASKEOP: -RASKEOP;
             }
             else
@@ -147,7 +149,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
         // kas on kirjeid vales kohas?
 
         if (järg >= paisktabel.size()) järg = 0;
-        if (järg == eemaldatavaIndex || paisktabel.get(järg, 0) == null)
+        if (järg == eemaldatavaRäsi || paisktabel.get(järg).size() == 0)
             // algoritm lõpetab 
             return õigeSamm.equals(samm) ? LÕPP : -LÕPP;
         

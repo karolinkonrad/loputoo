@@ -22,4 +22,9 @@ public class LopetusSamm extends Samm {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "algoritm lõpetab";
+    }
+
 }

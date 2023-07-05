@@ -75,12 +75,12 @@ public class Main {
 
             System.out.println("-----------------------------------------------------------");
             System.out.println("massiiv: " + yl.getAbiMassiiv().toString());
-            System.out.println("paisktabel: \n" + yl.getPaisktabel().toString());
+            System.out.println("paisktabel: " + yl.getPaisktabel().toString());
             System.out.println("""
                     l - algoritm lõpetab
-                    s <i> <v> sisesta element massiivist indeksilt i paisktabelisse võtmele v 
-                    e <i> <v> eemalda paisktabelist võtmelt v element ja pane see massiivi indeksile i
-                    u võta samm tagasi""");
+                    s <i> <r> - sisesta element massiivist indeksilt i paisktabelisse indeksile r 
+                    e <i> <r> - eemalda paisktabelist indeksilt r element ja pane see massiivi indeksile i
+                    u - võta samm tagasi""");
 
             userCommand = sc.nextLine().split(" ");
 
