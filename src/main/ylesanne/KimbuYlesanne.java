@@ -38,17 +38,17 @@ public class KimbuYlesanne extends Ylesanne {
         õigedTüübid.add(TABELIOP);
 
         for (Float arv : sisend) {
-            int voti = paiskfunktsioon(arv);
+            int räsi = paiskfunktsioon(arv);
 
             int i;
-            for (i = 0; i < p.get(voti).size(); i++) {
-                if (arv <= (float) p.get(voti, i)) break;
+            for (i = 0; i < p.get(räsi).size(); i++) {
+                if (arv <= (float) p.get(räsi, i)) break;
             }
 
-            p.sisesta(voti, i, arv);
-
-            if (i > 0) õigedTüübid.add(RASKEOP);
+            if (p.get(räsi).size() > 0) õigedTüübid.add(RASKEOP);
             else õigedTüübid.add(LISAMINE);
+
+            p.sisesta(räsi, i, arv);
         }
 
         for (Float _arv : sisend) {
@@ -81,12 +81,13 @@ public class KimbuYlesanne extends Ylesanne {
                 if (maxElem < arv) maxElem = arv;
                 sisend.add(arv);
             }
+            maxElem = (float) Math.ceil(maxElem);
         }
         return sisend;
     }
 
     public int paiskfunktsioon(float arv) {
-        return (int) Math.floor((arv-minElem) / (Math.ceil(maxElem)-minElem) * elementideArv);
+        return (int) Math.floor((arv-minElem) / (maxElem-minElem) * elementideArv);
     }
 
     @Override
@@ -125,14 +126,14 @@ public class KimbuYlesanne extends Ylesanne {
         if (abiMassiiv.size() > 0 && järg == 0) { // veel on lisamata kirjeid
             float arv = (float) abiMassiiv.get(0);
 
-            int voti = paiskfunktsioon(arv);
+            int räsi = paiskfunktsioon(arv);
             int i;
-            for (i = 0; i < paisktabel.get(voti).size(); i++) {
-                if (arv <= (float) paisktabel.get(voti, i)) break;
+            for (i = 0; i < paisktabel.get(räsi).size(); i++) {
+                if (arv <= (float) paisktabel.get(räsi, i)) break;
             }
-            õigeSamm = new SisestusSamm(0, voti, i);
+            õigeSamm = new SisestusSamm(0, räsi, i);
 
-            if (paisktabel.get(voti).size() == 0) { // Lisatakse tühja kimpu
+            if (paisktabel.get(räsi).size() == 0) { // Lisatakse tühja kimpu
                 return õigeSamm.equals(samm) ? LISAMINE: -LISAMINE;
             }
             else

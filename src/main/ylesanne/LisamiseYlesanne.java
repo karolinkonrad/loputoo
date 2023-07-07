@@ -30,10 +30,10 @@ public class LisamiseYlesanne extends Ylesanne {
         ArrayList<Integer> õigedTüübid = new ArrayList<>();
 
         for (Integer arv : sisend) {
-            int voti = paiskfunktsioon(arv);
-            int koht = p.leiaVabaKoht(voti);
+            int räsi = paiskfunktsioon(arv);
+            int koht = p.leiaVabaKoht(räsi);
 
-            if (voti != koht)
+            if (räsi != koht)
                 õigedTüübid.add(RASKEOP);
             else õigedTüübid.add(LISAMINE);
 
@@ -78,11 +78,11 @@ public class LisamiseYlesanne extends Ylesanne {
         if (abiMassiiv.size() > 0) { // veel on lisamata kirjeid
             int arv = (int) abiMassiiv.get(0);
 
-            int voti = paiskfunktsioon(arv);
-            int vabaVoti = paisktabel.leiaVabaKoht(voti);
-            õigeSamm = new SisestusSamm(0, vabaVoti, 0);
+            int räsi = paiskfunktsioon(arv);
+            int vabaRäsi = paisktabel.leiaVabaKoht(räsi);
+            õigeSamm = new SisestusSamm(0, vabaRäsi, 0);
 
-            if (vabaVoti == voti) { // nihutamisi ei tehta
+            if (vabaRäsi == räsi) { // nihutamisi ei tehta
                 return õigeSamm.equals(samm) ? LISAMINE: -LISAMINE;
             }
             else

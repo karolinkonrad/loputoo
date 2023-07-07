@@ -66,7 +66,7 @@ public class Main {
                         }
                         break;
                     }catch (IllegalArgumentException e) {
-                        throw e;
+                        System.out.println(e);
                     }
                 }
 
@@ -113,10 +113,11 @@ public class Main {
                         // true kui sammude ajalugu saab tühjaks. küsitakse uuesti paisktabeli parameetreid kui vaja
                         alusta = yl.tagasi();
                         break;
+                    default:
+                        System.out.println("Command not found!");
                 }
-            }catch (RuntimeException e) {
-                throw e;
-                //System.out.println(e);
+            }catch (IllegalArgumentException e) {
+                System.out.println(e);
             }
         }
     }

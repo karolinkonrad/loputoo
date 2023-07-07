@@ -1,13 +1,17 @@
 package main;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Logija {
     private File fail;
 
-    public Logija() throws IOException {
-        String dir = System.getProperty("user.dir") + "/läbimängud";
-        fail = File.createTempFile("log", ".txt", new File(dir));
+    public Logija() {
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy-hhmmss.SSS");
+        String dir = System.getProperty("user.dir") + "/läbimängud/";
+
+        fail = new File( dir + sdf.format( new Date() ) + ".txt");
     }
 
     public void logi(String sisu) {

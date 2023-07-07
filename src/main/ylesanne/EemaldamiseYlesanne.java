@@ -134,12 +134,12 @@ public class EemaldamiseYlesanne extends Ylesanne{
 
         if (abiMassiiv.size() > 1) { // kas on kirjeid tagasi panna?
             int arv = (int) abiMassiiv.get(0);
-            int voti = paiskfunktsioon(arv);
-            int vabaVoti = paisktabel.leiaVabaKoht(voti);
+            int räsi = paiskfunktsioon(arv);
+            int vabaRäsi = paisktabel.leiaVabaKoht(räsi);
 
-            õigeSamm = new SisestusSamm(0, vabaVoti, 0);
+            õigeSamm = new SisestusSamm(0, vabaRäsi, 0);
 
-            if (vabaVoti != kompejadaAlgsedIndeksid.get(arv)) { // kas uus vabaVoti on erinev vanast võtmest?
+            if (vabaRäsi != kompejadaAlgsedIndeksid.get(arv)) { // kas uus vabaRäsi on erinev vanast võtmest?
                 return õigeSamm.equals(samm) ? RASKEOP: -RASKEOP;
             }
             else

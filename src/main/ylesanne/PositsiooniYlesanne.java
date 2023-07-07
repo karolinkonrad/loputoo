@@ -32,14 +32,14 @@ public class PositsiooniYlesanne extends Ylesanne {
         õigedTüübid.add(TABELIOP);
 
         järk = 0;
-        while ( (maxElem / Math.pow(10, järk)) < 10 ) {
+        while ( (maxElem / Math.pow(10, järk)) > 1 ) {
 
             for (int arv : sisend) {
 
-                int voti = paiskfunktsioon(arv);
-                int i = p.get(voti).size();
+                int räsi = paiskfunktsioon(arv);
+                int i = p.get(räsi).size();
 
-                p.sisesta(voti, i, arv);
+                p.sisesta(räsi, i, arv);
 
                 if (i > 0) õigedTüübid.add(RASKEOP);
                 else õigedTüübid.add(LISAMINE);
@@ -126,16 +126,16 @@ public class PositsiooniYlesanne extends Ylesanne {
             return õigeSamm.equals(samm) ? TABELIOP: -TABELIOP;
         }
 
-        if ((maxElem / Math.pow(10, järk)) < 10) {
+        if ((maxElem / Math.pow(10, järk)) > 1) {
 
 
             if (abiMassiiv.size() > 0 && sisestamine) {
                 int arv = (int) abiMassiiv.get(0);
 
-                int voti = paiskfunktsioon(arv);
-                int koht = paisktabel.get(voti).size();
+                int räsi = paiskfunktsioon(arv);
+                int koht = paisktabel.get(räsi).size();
 
-                õigeSamm = new SisestusSamm(0, voti, koht);
+                õigeSamm = new SisestusSamm(0, räsi, koht);
 
                 if (koht == 0) { // Lisatakse tühja kimpu
                     return õigeSamm.equals(samm) ? LISAMINE : -LISAMINE;
