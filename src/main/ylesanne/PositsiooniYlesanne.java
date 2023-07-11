@@ -1,5 +1,6 @@
 package main.ylesanne;
 
+import main.Hindaja;
 import main.Paisktabel;
 import main.samm.*;
 
@@ -12,77 +13,17 @@ import java.util.List;
 import java.util.Random;
 
 public class PositsiooniYlesanne extends Ylesanne {
-    int maxElem;
-    int järk;
+    private ArrayList<Integer> sisend;
+    private int maxElem;
+    private int järk;
     private boolean sisestamine;
 
-    public PositsiooniYlesanne(String faili_tee) throws IOException {
-        super();
-        ArrayList<Integer> sisend = loeSisend(faili_tee);
+    public PositsiooniYlesanne(String faili_tee, Hindaja hindaja) throws IOException {
+        super(hindaja);
+        loeSisend(faili_tee);
 
         super.määra(this, new Paisktabel(0), sisend);
-
-
-        // õige läbimängu sammude leidmine
-
-        Paisktabel p = new Paisktabel(0);
-        ArrayList<Integer> õigedTüübid = new ArrayList<>();
-
-        p.looPaisktabel(10);
-        õigedTüübid.add(TABELIOP);
-
-        järk = 0;
-        while ( (maxElem / Math.pow(10, järk)) > 1 ) {
-
-            for (int arv : sisend) {
-
-                int räsi = paiskfunktsioon(arv);
-                int i = p.get(räsi).size();
-
-                p.sisesta(räsi, i, arv);
-
-                if (i > 0) õigedTüübid.add(RASKEOP);
-                else õigedTüübid.add(LISAMINE);
-            }
-
-            sisend.clear();
-            for (int i = 0; i < p.size(); i++) {
-                while (p.get(i).size() > 0){
-                    sisend.add((Integer) p.get(i, 0));
-                    p.eemalda(i, 0);
-                    õigedTüübid.add(EEMALDAMINE);
-                }
-            }
-
-            järk++;
-        }
-
-        õigedTüübid.add(LÕPP);
-
-        järk = 0;
-        sisestamine = true;
-        setÕigedTüübid(õigedTüübid);
-    }
-
-    private ArrayList<Integer> loeSisend(String faili_tee) throws IOException {
-        File file = new File( faili_tee);
-        ArrayList<Integer> sisend = new ArrayList<>();
-
-        if (file.isFile() && file.getName().endsWith(".txt")) {
-            List<String> read = Files.readAllLines(Path.of(file.getPath()));
-            Random rand = new Random();
-            String rida = read.get(rand.nextInt(read.size()));
-
-            sisend = new ArrayList<>();
-
-            maxElem = Integer.MIN_VALUE;
-            for (String s : rida.split(" ")) {
-                int elem = Integer.parseInt(s.replaceAll("[\\[\\]]",""));
-                if (maxElem < elem) maxElem = elem;
-                sisend.add(elem);
-            }
-        }
-        return sisend;
+        setÕigeLäbimäng(leiaÕigeLäbimäng());
     }
 
     public int paiskfunktsioon(int arv) {
@@ -114,6 +55,70 @@ public class PositsiooniYlesanne extends Ylesanne {
     @Override
     public String ylesandeKirjeldus() {
         return "Järjestada positsioonimeetodil järgmised arvud: " + abiMassiiv;
+    }
+
+    @Override
+    public void loeSisend(String faili_tee) throws IOException {
+        File file = new File( faili_tee);
+        sisend = new ArrayList<>();
+
+        if (file.isFile() && file.getName().endsWith(".txt")) {
+            List<String> read = Files.readAllLines(Path.of(file.getPath()));
+            Random rand = new Random();
+            String rida = read.get(rand.nextInt(read.size()));
+
+            sisend = new ArrayList<>();
+
+            maxElem = Integer.MIN_VALUE;
+            for (String s : rida.split(" ")) {
+                int elem = Integer.parseInt(s.replaceAll("[\\[\\]]",""));
+                if (maxElem < elem) maxElem = elem;
+                sisend.add(elem);
+            }
+        }
+    }
+
+    @Override
+    public ArrayList<Integer> leiaÕigeLäbimäng() {
+        // õige läbimängu sammude leidmine
+
+        Paisktabel p = new Paisktabel(0);
+        ArrayList<Integer> õigeLäbimäng = new ArrayList<>();
+
+        p.looPaisktabel(10);
+        õigeLäbimäng.add(TABELIOP);
+
+        järk = 0;
+        while ( (maxElem / Math.pow(10, järk)) > 1 ) {
+
+            for (int arv : sisend) {
+
+                int räsi = paiskfunktsioon(arv);
+                int i = p.get(räsi).size();
+
+                p.sisesta(räsi, i, arv);
+
+                if (i > 0) õigeLäbimäng.add(RASKEOP);
+                else õigeLäbimäng.add(LISAMINE);
+            }
+
+            sisend.clear();
+            for (int i = 0; i < p.size(); i++) {
+                while (p.get(i).size() > 0){
+                    sisend.add((Integer) p.get(i, 0));
+                    p.eemalda(i, 0);
+                    õigeLäbimäng.add(EEMALDAMINE);
+                }
+            }
+
+            järk++;
+        }
+
+        õigeLäbimäng.add(LÕPP);
+
+        järk = 0;
+        sisestamine = true;
+        return õigeLäbimäng;
     }
 
     @Override

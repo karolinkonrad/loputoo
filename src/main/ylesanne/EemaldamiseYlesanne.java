@@ -1,5 +1,6 @@
 package main.ylesanne;
 
+import main.Hindaja;
 import main.Paisktabel;
 import main.samm.*;
 
@@ -14,85 +15,26 @@ import java.util.Random;
 
 
 public class EemaldamiseYlesanne extends Ylesanne{
+    private ArrayList<Integer> sisend;
 
     private int eemaldatav;
     private int eemaldatavaRäsi;
-    HashMap<Integer, Integer> kompejadaAlgsedIndeksid;
+    private HashMap<Integer, Integer> kompejadaAlgsedIndeksid;
     private int järg;
 
 
-    public EemaldamiseYlesanne(String faili_tee) throws IOException {
-        super();
-        ArrayList<Integer> sisend = loeSisend(faili_tee);
+    public EemaldamiseYlesanne(String faili_tee, Hindaja hindaja) throws IOException {
+        super(hindaja);
+
+        loeSisend(faili_tee);
         Paisktabel paisktabel = new Paisktabel(1);
         paisktabel.looPaisktabel(sisend.size());
-
-        super.määra(this, paisktabel, new ArrayList<>());
-
         for (Integer arv : sisend) {
             paisktabel.sisesta( paisktabel.leiaVabaKoht(paiskfunktsioon(arv)), 0, arv);
         }
 
-        // õige läbimängu sammude leidmine
-
-        Paisktabel p = new Paisktabel(1);
-        p.looPaisktabel(sisend.size());
-
-        for (Integer arv : sisend) {
-            p.sisesta( p.leiaVabaKoht(paiskfunktsioon(arv)),0, arv);
-        }
-
-        kompejadaAlgsedIndeksid = new HashMap<>();
-        ArrayList<Integer> õigedTüübid = new ArrayList<>();
-
-        eemaldatavaRäsi = p.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav));
-        p.eemalda(eemaldatavaRäsi, 0);
-        õigedTüübid.add(KUSTUTAMINE);
-
-        int i = eemaldatavaRäsi;
-
-        while (true){ // kompejada läbimine
-            i++;
-            if (i >= p.size()) i = 0;
-            if (i == eemaldatavaRäsi) break;
-            if (p.get(i, 0) == null) break;
-
-            int arv = (int) p.get(i, 0);
-            kompejadaAlgsedIndeksid.put(arv, i);
-            p.eemalda(i, 0);
-            õigedTüübid.add(EEMALDAMINE);
-
-            int uusKoht = p.leiaVabaKoht(paiskfunktsioon(arv));
-            if (uusKoht != i)
-                õigedTüübid.add(RASKEOP);
-            else õigedTüübid.add(LISAMINE);
-            p.sisesta(uusKoht, 0, arv);
-
-        }
-        õigedTüübid.add(LÕPP);
-
-        järg = 0;
-        setÕigedTüübid(õigedTüübid);
-    }
-
-    private ArrayList<Integer> loeSisend(String faili_tee) throws IOException {
-        File file = new File(faili_tee);
-        ArrayList<Integer> sisend = new ArrayList<>();
-        if (file.isFile() && file.getName().endsWith(".txt")) {
-            List<String> read = Files.readAllLines(Path.of(file.getPath()));
-            Random rand = new Random();
-            String rida = read.get(rand.nextInt(read.size()));
-
-            sisend = new ArrayList<>();
-
-            for (String s : rida.split(" ")) {
-                if (s.contains("*"))
-                    eemaldatav = Integer.parseInt(s.replaceAll("[\\[*\\]]",""));
-                sisend.add(Integer.parseInt(s.replaceAll("[\\[*\\]]","")));
-            }
-
-        }
-        return sisend;
+        super.määra(this, paisktabel, new ArrayList<>());
+        setÕigeLäbimäng(leiaÕigeLäbimäng());
     }
 
     @Override
@@ -110,6 +52,71 @@ public class EemaldamiseYlesanne extends Ylesanne{
     @Override
     public String ylesandeKirjeldus() {
         return "Eemalda lahtise adresseerimiesega paisktabelist " + eemaldatav;
+    }
+
+    @Override
+    public void loeSisend(String faili_tee) throws IOException {
+        File file = new File(faili_tee);
+        sisend = new ArrayList<>();
+        if (file.isFile() && file.getName().endsWith(".txt")) {
+            List<String> read = Files.readAllLines(Path.of(file.getPath()));
+            Random rand = new Random();
+            String rida = read.get(rand.nextInt(read.size()));
+
+            sisend = new ArrayList<>();
+
+            for (String s : rida.split(" ")) {
+                if (s.contains("*"))
+                    eemaldatav = Integer.parseInt(s.replaceAll("[\\[*\\]]",""));
+                sisend.add(Integer.parseInt(s.replaceAll("[\\[*\\]]","")));
+            }
+
+        }
+    }
+
+    @Override
+    public ArrayList<Integer> leiaÕigeLäbimäng() {
+        // õige läbimängu sammude leidmine
+
+        Paisktabel p = new Paisktabel(1);
+        p.looPaisktabel(sisend.size());
+
+        for (Integer arv : sisend) {
+            p.sisesta( p.leiaVabaKoht(paiskfunktsioon(arv)),0, arv);
+        }
+
+        kompejadaAlgsedIndeksid = new HashMap<>();
+        ArrayList<Integer> õigeLäbimäng = new ArrayList<>();
+
+        eemaldatavaRäsi = p.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav));
+        p.eemalda(eemaldatavaRäsi, 0);
+        õigeLäbimäng.add(KUSTUTAMINE);
+
+        int i = eemaldatavaRäsi;
+
+        while (true){ // kompejada läbimine
+            i++;
+            if (i >= p.size()) i = 0;
+            if (i == eemaldatavaRäsi) break;
+            if (p.get(i, 0) == null) break;
+
+            int arv = (int) p.get(i, 0);
+            kompejadaAlgsedIndeksid.put(arv, i);
+            p.eemalda(i, 0);
+            õigeLäbimäng.add(EEMALDAMINE);
+
+            int uusKoht = p.leiaVabaKoht(paiskfunktsioon(arv));
+            if (uusKoht != i)
+                õigeLäbimäng.add(RASKEOP);
+            else õigeLäbimäng.add(LISAMINE);
+            p.sisesta(uusKoht, 0, arv);
+
+        }
+        õigeLäbimäng.add(LÕPP);
+
+        järg = 0;
+
+        return õigeLäbimäng;
     }
 
     @Override

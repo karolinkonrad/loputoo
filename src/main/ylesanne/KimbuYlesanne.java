@@ -1,5 +1,6 @@
 package main.ylesanne;
 
+import main.Hindaja;
 import main.Paisktabel;
 import main.samm.*;
 
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Random;
 
 public class KimbuYlesanne extends Ylesanne {
+    private ArrayList<Float> sisend;
+
     private int elementideArv;
     private float minElem;
     private float maxElem;
@@ -21,49 +24,30 @@ public class KimbuYlesanne extends Ylesanne {
     private float tudengiMinElem;
     private float tudengiMaxElem;
 
-    public KimbuYlesanne(String faili_tee) throws IOException {
-        super();
-        ArrayList<Float> sisend = loeSisend(faili_tee);
+
+    public KimbuYlesanne(String faili_tee, Hindaja hindaja) throws IOException {
+        super(hindaja);
+        loeSisend(faili_tee);
 
         super.määra(this, new Paisktabel(0), sisend);
 
-        // õige läbimängu sammude leidmine
 
-        Paisktabel p = new Paisktabel(0);
-        ArrayList<Integer> õigedTüübid = new ArrayList<>();
-
-        elementideArv = sisend.size();
-
-        p.looPaisktabel(elementideArv);
-        õigedTüübid.add(TABELIOP);
-
-        for (Float arv : sisend) {
-            int räsi = paiskfunktsioon(arv);
-
-            int i;
-            for (i = 0; i < p.get(räsi).size(); i++) {
-                if (arv <= (float) p.get(räsi, i)) break;
-            }
-
-            if (p.get(räsi).size() > 0) õigedTüübid.add(RASKEOP);
-            else õigedTüübid.add(LISAMINE);
-
-            p.sisesta(räsi, i, arv);
-        }
-
-        for (Float _arv : sisend) {
-            õigedTüübid.add(EEMALDAMINE);
-        }
-
-        õigedTüübid.add(LÕPP);
-
-        järg = 0;
-        setÕigedTüübid(õigedTüübid);
+        setÕigeLäbimäng(leiaÕigeLäbimäng());
     }
 
-    private ArrayList<Float> loeSisend(String faili_tee) throws IOException {
+    public int paiskfunktsioon(float arv) {
+        return (int) Math.floor((arv-tudengiMinElem) / (tudengiMaxElem-tudengiMinElem) * tudengiElementideArv);
+    }
+
+    @Override
+    public String ylesandeKirjeldus() {
+        return "Järjestada kimbumeetodil järgmised arvud: " + super.getAbiMassiiv().toString();
+    }
+
+    @Override
+    public void loeSisend(String faili_tee) throws IOException {
         File file = new File(faili_tee);
-        ArrayList<Float> sisend = new ArrayList<>();
+        sisend = new ArrayList<>();
 
         if (file.isFile() && file.getName().endsWith(".txt")) {
             List<String> read = Files.readAllLines(Path.of(file.getPath()));
@@ -82,17 +66,45 @@ public class KimbuYlesanne extends Ylesanne {
                 sisend.add(arv);
             }
             maxElem = (float) Math.ceil(maxElem);
-        }
-        return sisend;
-    }
 
-    public int paiskfunktsioon(float arv) {
-        return (int) Math.floor((arv-minElem) / (maxElem-minElem) * elementideArv);
+            paisktabeliParameetrid(minElem, maxElem, elementideArv);
+        }
     }
 
     @Override
-    public String ylesandeKirjeldus() {
-        return "Järjestada kimbumeetodil järgmised arvud: " + super.getAbiMassiiv().toString();
+    public ArrayList<Integer> leiaÕigeLäbimäng() {
+       // õige läbimängu sammude leidmine
+
+        Paisktabel p = new Paisktabel(0);
+        ArrayList<Integer> õigeLäbimäng = new ArrayList<>();
+
+        elementideArv = sisend.size();
+
+        p.looPaisktabel(elementideArv);
+        õigeLäbimäng.add(TABELIOP);
+
+        for (Float arv : sisend) {
+            int räsi = paiskfunktsioon(arv);
+
+            int i;
+            for (i = 0; i < p.get(räsi).size(); i++) {
+                if (arv <= (float) p.get(räsi, i)) break;
+            }
+
+            if (p.get(räsi).size() > 0) õigeLäbimäng.add(RASKEOP);
+            else õigeLäbimäng.add(LISAMINE);
+
+            p.sisesta(räsi, i, arv);
+        }
+
+        for (Float _arv : sisend) {
+            õigeLäbimäng.add(EEMALDAMINE);
+        }
+
+        õigeLäbimäng.add(LÕPP);
+
+        järg = 0;
+        return õigeLäbimäng;
     }
 
     @Override

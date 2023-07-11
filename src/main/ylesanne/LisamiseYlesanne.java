@@ -1,5 +1,6 @@
 package main.ylesanne;
 
+import main.Hindaja;
 import main.Paisktabel;
 import main.samm.LopetusSamm;
 import main.samm.Samm;
@@ -14,40 +15,27 @@ import java.util.List;
 import java.util.Random;
 
 public class LisamiseYlesanne extends Ylesanne {
+    private ArrayList<Integer> sisend;
 
-    public LisamiseYlesanne(String faili_tee) throws IOException {
-        super();
-        ArrayList<Integer> sisend = loeSisend(faili_tee);
+    public LisamiseYlesanne(String faili_tee, Hindaja hindaja) throws IOException {
+        super(hindaja);
+        loeSisend(faili_tee);
         Paisktabel paisktabel = new Paisktabel(1);
         paisktabel.looPaisktabel(sisend.size());
 
         super.määra(this, paisktabel, sisend);
-
-        // õige läbimängu sammude leidmine
-        Paisktabel p = new Paisktabel(1);
-        p.looPaisktabel(sisend.size());
-
-        ArrayList<Integer> õigedTüübid = new ArrayList<>();
-
-        for (Integer arv : sisend) {
-            int räsi = paiskfunktsioon(arv);
-            int koht = p.leiaVabaKoht(räsi);
-
-            if (räsi != koht)
-                õigedTüübid.add(RASKEOP);
-            else õigedTüübid.add(LISAMINE);
-
-            p.sisesta(koht, 0, arv);
-        }
-
-        õigedTüübid.add(LÕPP);
-
-        setÕigedTüübid(õigedTüübid);
+        setÕigeLäbimäng(leiaÕigeLäbimäng());
     }
 
-    private ArrayList<Integer> loeSisend(String faili_tee) throws IOException {
+    @Override
+    public String ylesandeKirjeldus() {
+        return "Lisa lahtise adresseerimisega paisktabelisse samas järjekorras järgmised elemendid: " + super.abiMassiiv.toString();
+    }
+
+    @Override
+    public void loeSisend(String faili_tee) throws IOException {
         File file = new File( faili_tee);
-        ArrayList<Integer> sisend = new ArrayList<>();
+        sisend = new ArrayList<>();
 
         if (file.isFile() && file.getName().endsWith(".txt")) {
             List<String> read = Files.readAllLines(Path.of(file.getPath()));
@@ -59,14 +47,30 @@ public class LisamiseYlesanne extends Ylesanne {
             for (String s : rida.split(" ")) {
                 sisend.add(Integer.parseInt(s.replaceAll("[\\[*\\]]","")));
             }
-
         }
-        return sisend;
     }
 
     @Override
-    public String ylesandeKirjeldus() {
-        return "Lisa lahtise adresseerimisega paisktabelisse samas järjekorras järgmised elemendid: " + super.abiMassiiv.toString();
+    public ArrayList<Integer> leiaÕigeLäbimäng() {
+        // õige läbimängu sammude leidmine
+        Paisktabel p = new Paisktabel(1);
+        p.looPaisktabel(sisend.size());
+
+        ArrayList<Integer> õigeLäbimäng = new ArrayList<>();
+
+        for (Integer arv : sisend) {
+            int räsi = paiskfunktsioon(arv);
+            int koht = p.leiaVabaKoht(räsi);
+
+            if (räsi != koht)
+                õigeLäbimäng.add(RASKEOP);
+            else õigeLäbimäng.add(LISAMINE);
+
+            p.sisesta(koht, 0, arv);
+        }
+
+        õigeLäbimäng.add(LÕPP);
+        return õigeLäbimäng;
     }
 
     @Override

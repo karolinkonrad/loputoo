@@ -31,16 +31,16 @@ public class Main {
 
         switch (ylesandetüüp) {
             case "l":
-                yl = new LisamiseYlesanne(System.getProperty("user.dir") + "/sisendid/lisamineEemaldamine/sisend.txt");
+                yl = new LisamiseYlesanne(System.getProperty("user.dir") + "/sisendid/lisamineEemaldamine/sisend.txt", new Hindaja());
                 break;
             case "e":
-                yl = new EemaldamiseYlesanne( System.getProperty("user.dir") + "/sisendid/lisamineEemaldamine/sisend.txt");
+                yl = new EemaldamiseYlesanne( System.getProperty("user.dir") + "/sisendid/lisamineEemaldamine/sisend.txt", new Hindaja());
                 break;
             case "k":
-                yl = new KimbuYlesanne(System.getProperty("user.dir") + "/sisendid/kimbumeetod/sisend.txt");
+                yl = new KimbuYlesanne(System.getProperty("user.dir") + "/sisendid/kimbumeetod/sisend.txt", new Hindaja());
                 break;
             case "p":
-                yl = new PositsiooniYlesanne(System.getProperty("user.dir") + "/sisendid/positsioonimeetod/sisend.txt");
+                yl = new PositsiooniYlesanne(System.getProperty("user.dir") + "/sisendid/positsioonimeetod/sisend.txt", new Hindaja());
         }
 
         System.out.println(yl.ylesandeKirjeldus());
@@ -89,7 +89,7 @@ public class Main {
                     // l algoritm lõpetab
                     case "l":
                         yl.astu(new LopetusSamm());
-                        System.out.println("Hinne: " + yl.getHinne() + "%");
+                        System.out.println("Hinne: " + yl.getPunktid() + "%");
                         return;
 
                     // s <i> <v> sisesta element massiivist indeksilt i paisktabelisse võtmele v
