@@ -1,6 +1,7 @@
 package main.ylesanne;
 
 import main.Hindaja;
+import main.Hinnang;
 import main.Paisktabel;
 import main.samm.*;
 
@@ -34,6 +35,25 @@ public class KimbuYlesanne extends Ylesanne {
 
         setÕigeLäbimäng(leiaÕigeLäbimäng());
     }
+
+
+    @Override
+    public void paisktabeliParameetrid(float minElem, float maxElem, int elementideArv) {
+        this.tudengiMinElem = minElem;
+        this.tudengiMaxElem = maxElem;
+        this.tudengiElementideArv = elementideArv;
+    }
+
+    @Override
+    protected void astuJärg(Hinnang hinnang) {
+        if (hinnang.liik == hindaja.EEMALDAMINE && hinnang.õige) järg++;
+    }
+
+    @Override
+    protected void tagasiJärg(Hinnang hinnang) {
+        if (hinnang.liik == hindaja.EEMALDAMINE && hinnang.õige) järg--;
+    }
+
 
     public int paiskfunktsioon(float arv) {
         return (int) Math.floor((arv-tudengiMinElem) / (tudengiMaxElem-tudengiMinElem) * tudengiElementideArv);
@@ -72,16 +92,16 @@ public class KimbuYlesanne extends Ylesanne {
     }
 
     @Override
-    public ArrayList<Integer> leiaÕigeLäbimäng() {
-       // õige läbimängu sammude leidmine
+    public ArrayList<Hinnang> leiaÕigeLäbimäng() {
+        // õige läbimängu sammude leidmine
 
         Paisktabel p = new Paisktabel(0);
-        ArrayList<Integer> õigeLäbimäng = new ArrayList<>();
+        ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 
         elementideArv = sisend.size();
 
         p.looPaisktabel(elementideArv);
-        õigeLäbimäng.add(TABELIOP);
+        õigeLäbimäng.add(new Hinnang(new PaisktabeliLoomisSamm(minElem, maxElem, elementideArv), hindaja.TABELIOP, null, true));
 
         for (Float arv : sisend) {
             int räsi = paiskfunktsioon(arv);
@@ -91,48 +111,36 @@ public class KimbuYlesanne extends Ylesanne {
                 if (arv <= (float) p.get(räsi, i)) break;
             }
 
-            if (p.get(räsi).size() > 0) õigeLäbimäng.add(RASKEOP);
-            else õigeLäbimäng.add(LISAMINE);
+            if (p.get(räsi).size() > 0) õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, räsi, i), hindaja.RASKEOP, null, true));
+            else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, räsi, i), hindaja.LISAMINE, null, true));
 
             p.sisesta(räsi, i, arv);
         }
 
-        for (Float _arv : sisend) {
-            õigeLäbimäng.add(EEMALDAMINE);
+        sisend.clear();
+        for (int i = 0; i < p.size(); i++) {
+            while (p.get(i).size() > 0){
+                sisend.add((Float) p.get(i, 0));
+                p.eemalda(i, 0);
+                õigeLäbimäng.add(new Hinnang(new EemaldusSamm(sisend.size()-1, i, 0), hindaja.EEMALDAMINE, null, true));
+            }
         }
 
-        õigeLäbimäng.add(LÕPP);
+        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), hindaja.LÕPP, null, true));
 
         järg = 0;
         return õigeLäbimäng;
     }
 
     @Override
-    public void paisktabeliParameetrid(float minElem, float maxElem, int elementideArv) {
-        this.tudengiMinElem = minElem;
-        this.tudengiMaxElem = maxElem;
-        this.tudengiElementideArv = elementideArv;
-    }
-
-    @Override
-    protected void astuJärg(int hinnang) {
-        if (hinnang == EEMALDAMINE) järg++;
-    }
-
-    @Override
-    protected void tagasiJärg(int hinnang) {
-        if (hinnang == EEMALDAMINE) järg--;
-    }
-
-    @Override
-    public int hindaSammu(Samm samm) {
+    public Hinnang hindaSammu(Samm samm) {
         // tagastab vea tüübi
 
-        Samm õigeSamm = new LopetusSamm();
+        Samm õigeSamm = new LõpetusSamm();
 
         if (paisktabel.size() == 0) {
             õigeSamm = new PaisktabeliLoomisSamm(minElem, maxElem, elementideArv);
-            return õigeSamm.equals(samm) ? TABELIOP: -TABELIOP;
+            return new Hinnang(õigeSamm, hindaja.TABELIOP, samm, õigeSamm.equals(samm));
         }
 
         if (abiMassiiv.size() > 0 && järg == 0) { // veel on lisamata kirjeid
@@ -146,23 +154,23 @@ public class KimbuYlesanne extends Ylesanne {
             õigeSamm = new SisestusSamm(0, räsi, i);
 
             if (paisktabel.get(räsi).size() == 0) { // Lisatakse tühja kimpu
-                return õigeSamm.equals(samm) ? LISAMINE: -LISAMINE;
+                return new Hinnang(õigeSamm, hindaja.LISAMINE, samm, õigeSamm.equals(samm));
             }
             else
-                return õigeSamm.equals(samm) ? RASKEOP: -RASKEOP;
+                return new Hinnang(õigeSamm, hindaja.RASKEOP, samm, õigeSamm.equals(samm));
 
         }
         else {
             for (int i = 0; i < paisktabel.size(); i++) {
                 if (paisktabel.get(i).size() > 0) {
                     õigeSamm = new EemaldusSamm<Float>(abiMassiiv.size(), i, 0);
-                    return õigeSamm.equals(samm) ? EEMALDAMINE : -EEMALDAMINE;
+                    return new Hinnang(õigeSamm, hindaja.EEMALDAMINE, samm, õigeSamm.equals(samm));
                 }
             }
         }
 
         // algoritm lõpetab
-        return õigeSamm.equals(samm) ? LÕPP : -LÕPP;
+        return new Hinnang(õigeSamm, hindaja.LÕPP, samm, õigeSamm.equals(samm));
     }
 
 }

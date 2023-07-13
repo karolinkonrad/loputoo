@@ -5,9 +5,9 @@ import main.ylesanne.Ylesanne;
 import java.util.Objects;
 
 public class PaisktabeliLoomisSamm extends Samm {
-    float minElement;
-    float maxElement;
-    int paisktabeliPikkus;
+    private final float minElement;
+    private final float maxElement;
+    private final int paisktabeliPikkus;
 
     public PaisktabeliLoomisSamm(int paisktabeliPikkus) {
         super();

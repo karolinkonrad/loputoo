@@ -1,8 +1,9 @@
 package main.ylesanne;
 
 import main.Hindaja;
+import main.Hinnang;
 import main.Paisktabel;
-import main.samm.LopetusSamm;
+import main.samm.LõpetusSamm;
 import main.samm.Samm;
 import main.samm.SisestusSamm;
 
@@ -51,33 +52,33 @@ public class LisamiseYlesanne extends Ylesanne {
     }
 
     @Override
-    public ArrayList<Integer> leiaÕigeLäbimäng() {
+    public ArrayList<Hinnang> leiaÕigeLäbimäng() {
         // õige läbimängu sammude leidmine
         Paisktabel p = new Paisktabel(1);
         p.looPaisktabel(sisend.size());
 
-        ArrayList<Integer> õigeLäbimäng = new ArrayList<>();
+        ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 
         for (Integer arv : sisend) {
             int räsi = paiskfunktsioon(arv);
             int koht = p.leiaVabaKoht(räsi);
 
             if (räsi != koht)
-                õigeLäbimäng.add(RASKEOP);
-            else õigeLäbimäng.add(LISAMINE);
+                õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, koht, 0), hindaja.RASKEOP, null, true));
+            else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, koht, 0), hindaja.LISAMINE, null, true));
 
             p.sisesta(koht, 0, arv);
         }
 
-        õigeLäbimäng.add(LÕPP);
+        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), hindaja.LÕPP, null, true));
         return õigeLäbimäng;
     }
 
     @Override
-    public int hindaSammu(Samm samm) {
+    public Hinnang hindaSammu(Samm samm) {
         // tagastab vea tüübi
 
-        Samm õigeSamm = new LopetusSamm();
+        Samm õigeSamm = new LõpetusSamm();
 
         if (abiMassiiv.size() > 0) { // veel on lisamata kirjeid
             int arv = (int) abiMassiiv.get(0);
@@ -87,14 +88,14 @@ public class LisamiseYlesanne extends Ylesanne {
             õigeSamm = new SisestusSamm(0, vabaRäsi, 0);
 
             if (vabaRäsi == räsi) { // nihutamisi ei tehta
-                return õigeSamm.equals(samm) ? LISAMINE: -LISAMINE;
+                return new Hinnang(õigeSamm, hindaja.LISAMINE, samm, õigeSamm.equals(samm));
             }
             else
-                return õigeSamm.equals(samm) ? RASKEOP: -RASKEOP;
+                return new Hinnang(õigeSamm, hindaja.RASKEOP, samm, õigeSamm.equals(samm));
 
         }
         // algoritm lõpetab
-        return õigeSamm.equals(samm) ? LÕPP : -LÕPP;
+        return new Hinnang(õigeSamm, hindaja.LÕPP, samm, õigeSamm.equals(samm));
     }
 
 }

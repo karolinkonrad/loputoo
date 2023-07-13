@@ -1,7 +1,7 @@
 package main;
 
 import main.samm.EemaldusSamm;
-import main.samm.LopetusSamm;
+import main.samm.LõpetusSamm;
 import main.samm.PaisktabeliLoomisSamm;
 import main.samm.SisestusSamm;
 import main.ylesanne.*;
@@ -88,7 +88,7 @@ public class Main {
                 switch (userCommand[0]) {
                     // l algoritm lõpetab
                     case "l":
-                        yl.astu(new LopetusSamm());
+                        yl.astu(new LõpetusSamm());
                         System.out.println("Hinne: " + yl.getPunktid() + "%");
                         return;
 

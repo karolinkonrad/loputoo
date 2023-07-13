@@ -5,9 +5,9 @@ import main.ylesanne.Ylesanne;
 import java.util.Objects;
 
 public class SisestusSamm<T> extends Samm {
-    private int index; //indeks abimassiivis
-    private int räsi; //võti paisktabelis
-    private int koht; //koht ahelas
+    private final int index; //indeks abimassiivis
+    private final int räsi; //võti paisktabelis
+    private final int koht; //koht ahelas
     private T element;
 
     public SisestusSamm(int index, int räsi, int koht) {
