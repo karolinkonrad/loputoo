@@ -18,10 +18,15 @@ public class EemaldusSamm<T> extends Samm {
     }
 
     @Override
-    public void astu(Ylesanne ylesanne) {
+    public boolean astu(Ylesanne ylesanne) {
         element = (T) ylesanne.getPaisktabel().get(räsi, koht);
+        if (element == null || index >= ylesanne.getAbiMassiiv().size())
+            return false;
+
         ylesanne.getPaisktabel().eemalda(räsi, koht);
         ylesanne.getAbiMassiiv().add(index, element);
+
+        return true;
     }
 
     @Override

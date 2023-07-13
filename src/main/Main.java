@@ -47,6 +47,7 @@ public class Main {
 
         while (true){
             if (alusta) {
+                System.out.println("ALGUS");
                 // uuesti alustamine
                 while (true) {
                     try {

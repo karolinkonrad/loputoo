@@ -24,9 +24,10 @@ public class PaisktabeliLoomisSamm extends Samm {
     }
 
     @Override
-    public void astu(Ylesanne ylesanne) {
+    public boolean astu(Ylesanne ylesanne) {
         ylesanne.paisktabeliParameetrid(minElement, maxElement, paisktabeliPikkus);
         ylesanne.getPaisktabel().looPaisktabel(paisktabeliPikkus);
+        return true;
     }
 
     @Override

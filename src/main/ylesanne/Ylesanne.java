@@ -54,17 +54,20 @@ public abstract class Ylesanne<T> {
     public void paisktabeliParameetrid(float minElem, float maxElem, int elementideArv) { // m a b
     }
 
-    public void astu(Samm samm) {
+    public boolean astu(Samm samm) {
         Hinnang hinnang = ylesanne.hindaSammu(samm);
-        ylesanne.astuJärg(hinnang);
-        läbimäng.push(hinnang);
+        if (samm.astu(this)) {
+            ylesanne.astuJärg(hinnang);
+            läbimäng.push(hinnang);
 
-        logija.logi("---------------------------------------------------------\n"
-                + abiMassiiv.toString() + "\n"
-                + paisktabel.toString() + "\n"
-                + hinnang.toString() );
+            logija.logi("---------------------------------------------------------\n"
+                    + abiMassiiv.toString() + "\n"
+                    + paisktabel.toString() + "\n"
+                    + hinnang.toString());
 
-        samm.astu(this);
+            return true;
+        }
+        return false;
     }
 
     public boolean tagasi() {
@@ -76,7 +79,8 @@ public abstract class Ylesanne<T> {
             ylesanne.tagasiJärg(hinnang);
             logija.logi("---------------------------------------------------------\n"
                     + abiMassiiv.toString() + "\n"
-                    + paisktabel.toString() + "\nTAGASI");
+                    + paisktabel.toString() + "\nTAGASI:\n"
+                    + hinnang);
         }
         else
             läbimäng.push(hinnang);

@@ -18,10 +18,15 @@ public class SisestusSamm<T> extends Samm {
     }
 
     @Override
-    public void astu(Ylesanne ylesanne) {
+    public boolean astu(Ylesanne ylesanne) {
         element = (T) ylesanne.getAbiMassiiv().get(index);
+        if (element == null || räsi >= ylesanne.getPaisktabel().size() || koht > ylesanne.getPaisktabel().get(räsi).size())
+            return false;
+
         ylesanne.getPaisktabel().sisesta(räsi, koht, element);
         ylesanne.getAbiMassiiv().remove(index);
+
+        return true;
     }
 
     @Override

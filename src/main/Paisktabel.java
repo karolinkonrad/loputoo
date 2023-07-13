@@ -30,7 +30,7 @@ public class Paisktabel<T> {
 
     public boolean eemalda(int r, int k) {
         ArrayList<T> ahel = tabel.get(r);
-        if (ahel.size() > 0) {
+        if (ahel.size() > k) {
             ahel.remove(k);
             return true;
         }

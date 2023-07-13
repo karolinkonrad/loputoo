@@ -6,8 +6,9 @@ public class LõpetusSamm extends Samm {
     // kuidagi seotud hindamisega
 
     @Override
-    public void astu(Ylesanne ylesanne) {
+    public boolean astu(Ylesanne ylesanne) {
         ylesanne.lõpeta();
+        return true;
     }
 
     @Override
