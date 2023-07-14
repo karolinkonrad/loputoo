@@ -95,12 +95,11 @@ public class KimbuYlesanne extends Ylesanne {
     public ArrayList<Hinnang> leiaÕigeLäbimäng() {
         // õige läbimängu sammude leidmine
 
-        Paisktabel p = new Paisktabel(0);
         ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 
         elementideArv = sisend.size();
 
-        p.looPaisktabel(elementideArv);
+        Paisktabel p = new Paisktabel(0, elementideArv);
         õigeLäbimäng.add(new Hinnang(new PaisktabeliLoomisSamm(minElem, maxElem, elementideArv), hindaja.TABELIOP, null, true));
 
         for (Float arv : sisend) {

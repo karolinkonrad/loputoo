@@ -28,8 +28,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
         super(hindaja);
 
         loeSisend(faili_tee);
-        Paisktabel paisktabel = new Paisktabel(1);
-        paisktabel.looPaisktabel(sisend.size());
+        Paisktabel paisktabel = new Paisktabel(1, sisend.size());
         for (Integer arv : sisend) {
             paisktabel.sisesta( paisktabel.leiaVabaKoht(paiskfunktsioon(arv)), 0, arv);
         }
@@ -79,8 +78,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
     public ArrayList<Hinnang> leiaÕigeLäbimäng() {
         // õige läbimängu sammude leidmine
 
-        Paisktabel p = new Paisktabel(1);
-        p.looPaisktabel(sisend.size());
+        Paisktabel p = new Paisktabel(1, sisend.size());
 
         for (Integer arv : sisend) {
             p.sisesta( p.leiaVabaKoht(paiskfunktsioon(arv)),0, arv);

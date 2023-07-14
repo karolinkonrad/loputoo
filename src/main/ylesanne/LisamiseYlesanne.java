@@ -21,8 +21,7 @@ public class LisamiseYlesanne extends Ylesanne {
     public LisamiseYlesanne(String faili_tee, Hindaja hindaja) throws IOException {
         super(hindaja);
         loeSisend(faili_tee);
-        Paisktabel paisktabel = new Paisktabel(1);
-        paisktabel.looPaisktabel(sisend.size());
+        Paisktabel paisktabel = new Paisktabel(1, sisend.size());
 
         super.määra(this, paisktabel, sisend);
         setÕigeLäbimäng(leiaÕigeLäbimäng());
@@ -54,8 +53,7 @@ public class LisamiseYlesanne extends Ylesanne {
     @Override
     public ArrayList<Hinnang> leiaÕigeLäbimäng() {
         // õige läbimängu sammude leidmine
-        Paisktabel p = new Paisktabel(1);
-        p.looPaisktabel(sisend.size());
+        Paisktabel p = new Paisktabel(1, sisend.size());
 
         ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 

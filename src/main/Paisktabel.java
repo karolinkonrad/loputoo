@@ -23,6 +23,12 @@ public class Paisktabel<T> {
         this.tabel = new ArrayList<>();
     }
 
+    public Paisktabel(int kompesamm, int len) {
+        this.kompesamm = kompesamm;
+        this.tabel = new ArrayList<>();
+        looPaisktabel(len);
+    }
+
     public boolean sisesta(int r, int k, T elem) {
         tabel.get(r).add(k, elem);
         return true;

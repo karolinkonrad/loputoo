@@ -83,10 +83,9 @@ public class PositsiooniYlesanne extends Ylesanne {
     public ArrayList<Hinnang> leiaÕigeLäbimäng() {
         // õige läbimängu sammude leidmine
 
-        Paisktabel p = new Paisktabel(0);
         ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 
-        p.looPaisktabel(10);
+        Paisktabel p = new Paisktabel(0, 10);
         õigeLäbimäng.add(new Hinnang(new PaisktabeliLoomisSamm(10), hindaja.TABELIOP, null, true));
 
         järk = 0;
