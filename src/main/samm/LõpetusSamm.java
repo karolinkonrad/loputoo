@@ -1,18 +1,18 @@
 package main.samm;
 
-import main.ylesanne.Ylesanne;
+import main.Läbimäng;
 
 public class LõpetusSamm extends Samm {
     // kuidagi seotud hindamisega
 
     @Override
-    public boolean astu(Ylesanne ylesanne) {
-        ylesanne.lõpeta();
+    public boolean astu(Läbimäng läbimäng) {
+        läbimäng.lõpeta();
         return true;
     }
 
     @Override
-    public boolean tagasi(Ylesanne ylesanne) {
+    public boolean tagasi(Läbimäng läbimäng) {
         return false;
     }
 

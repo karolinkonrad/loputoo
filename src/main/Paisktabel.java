@@ -77,7 +77,7 @@ public class Paisktabel<T> {
 
     @Override
     public String toString() {
-        String str = "paisktabel: ";
+        String str = "";
 
         for (int i = 0; i < tabel.size(); i++) {
 

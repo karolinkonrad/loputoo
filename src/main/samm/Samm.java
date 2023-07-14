@@ -1,12 +1,12 @@
 package main.samm;
 
 
-import main.ylesanne.Ylesanne;
+import main.Läbimäng;
 
 public abstract class Samm{
-    abstract public boolean astu(Ylesanne ylesanne);
+    abstract public boolean astu(Läbimäng läbimäng);
 
-    abstract public boolean tagasi(Ylesanne ylesanne);
+    abstract public boolean tagasi(Läbimäng läbimäng);
 
     public abstract boolean equals(Object o);
 

@@ -1,6 +1,6 @@
 package main.samm;
 
-import main.ylesanne.Ylesanne;
+import main.Läbimäng;
 
 import java.util.Objects;
 
@@ -24,15 +24,15 @@ public class PaisktabeliLoomisSamm extends Samm {
     }
 
     @Override
-    public boolean astu(Ylesanne ylesanne) {
-        ylesanne.paisktabeliParameetrid(minElement, maxElement, paisktabeliPikkus);
-        ylesanne.getPaisktabel().looPaisktabel(paisktabeliPikkus);
+    public boolean astu(Läbimäng läbimäng) {
+        läbimäng.setPaisktabeliParameetrid(minElement, maxElement, paisktabeliPikkus);
+        läbimäng.getPaisktabel().looPaisktabel(paisktabeliPikkus);
         return true;
     }
 
     @Override
-    public boolean tagasi(Ylesanne ylesanne) {
-        ylesanne.getPaisktabel().hävitaPaisktabel();
+    public boolean tagasi(Läbimäng läbimäng) {
+        läbimäng.getPaisktabel().hävitaPaisktabel();
         return true;
     }
 

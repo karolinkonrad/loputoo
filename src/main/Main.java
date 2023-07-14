@@ -14,7 +14,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Ylesanne yl = null;
+        Läbimäng context = new Läbimäng();
+        context.setHindaja(new Hindaja());
+
         Scanner sc = new Scanner(System.in);
         boolean alusta = true;
         String[] userCommand;
@@ -31,19 +33,19 @@ public class Main {
 
         switch (ylesandetüüp) {
             case "l":
-                yl = new LisamiseYlesanne(System.getProperty("user.dir") + "/sisendid/lisamineEemaldamine/sisend.txt", new Hindaja());
+                context.setYlesanne(new LisamiseYlesanne(System.getProperty("user.dir") + "/sisendid/lisamineEemaldamine/sisend.txt"));
                 break;
             case "e":
-                yl = new EemaldamiseYlesanne( System.getProperty("user.dir") + "/sisendid/lisamineEemaldamine/sisend.txt", new Hindaja());
+                context.setYlesanne(new EemaldamiseYlesanne( System.getProperty("user.dir") + "/sisendid/lisamineEemaldamine/sisend.txt"));
                 break;
             case "k":
-                yl = new KimbuYlesanne(System.getProperty("user.dir") + "/sisendid/kimbumeetod/sisend.txt", new Hindaja());
+                context.setYlesanne(new KimbuYlesanne(System.getProperty("user.dir") + "/sisendid/kimbumeetod/sisend.txt"));
                 break;
             case "p":
-                yl = new PositsiooniYlesanne(System.getProperty("user.dir") + "/sisendid/positsioonimeetod/sisend.txt", new Hindaja());
+                context.setYlesanne(new PositsiooniYlesanne(System.getProperty("user.dir") + "/sisendid/positsioonimeetod/sisend.txt"));
         }
 
-        System.out.println(yl.ylesandeKirjeldus());
+        System.out.println(context.ylesandeKirjeldus());
 
         while (true){
             if (alusta) {
@@ -55,12 +57,12 @@ public class Main {
                             case "p":
                                 System.out.print("Sisesta paisktabeli pikkus: ");
                                 userCommand = sc.nextLine().split(" ");
-                                yl.astu(new PaisktabeliLoomisSamm(Integer.parseInt(userCommand[0])));
+                                context.astu(new PaisktabeliLoomisSamm(Integer.parseInt(userCommand[0])));
                                 break;
                             case "k":
                                 System.out.print("Sisesta a b m (eraldatud tühikutega): ");
                                 userCommand = sc.nextLine().split(" ");
-                                yl.astu(new PaisktabeliLoomisSamm(Float.valueOf(userCommand[0]), Float.valueOf(userCommand[1]), Integer.parseInt(userCommand[2])));
+                                context.astu(new PaisktabeliLoomisSamm(Float.valueOf(userCommand[0]), Float.valueOf(userCommand[1]), Integer.parseInt(userCommand[2])));
                                 break;
                             default:
 
@@ -75,8 +77,8 @@ public class Main {
             }
 
             System.out.println("-----------------------------------------------------------");
-            System.out.println("massiiv: " + yl.getAbiMassiiv().toString());
-            System.out.println("paisktabel: " + yl.getPaisktabel().toString());
+            System.out.println("massiiv: " + context.getAbiMassiiv().toString());
+            System.out.println("paisktabel: " + context.getPaisktabel().toString());
             System.out.println("""
                     l - algoritm lõpetab
                     s <i> <r> - sisesta element massiivist indeksilt i paisktabelisse indeksile r 
@@ -89,30 +91,30 @@ public class Main {
                 switch (userCommand[0]) {
                     // l algoritm lõpetab
                     case "l":
-                        yl.astu(new LõpetusSamm());
-                        System.out.println("Hinne: " + yl.getPunktid() + "%");
+                        context.astu(new LõpetusSamm());
+                        System.out.println("Hinne: " + context.getPunktid() + "%");
                         return;
 
                     // s <i> <v> sisesta element massiivist indeksilt i paisktabelisse võtmele v
                     case "s":
                         if (userCommand.length > 3)
-                            yl.astu(new SisestusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[3])));
+                            context.astu(new SisestusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[3])));
                         else
-                            yl.astu(new SisestusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), 0));
+                            context.astu(new SisestusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), 0));
                         break;
 
                     // e <i> <v> eemalda paisktabelist võtmelt v element ja pane see massiivi indeksile i
                     case "e":
                         if (userCommand.length > 3)
-                            yl.astu(new EemaldusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[3])));
+                            context.astu(new EemaldusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[3])));
                         else
-                            yl.astu(new EemaldusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), 0));
+                            context.astu(new EemaldusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), 0));
                         break;
 
                     // u võta samm tagasi
                     case "u":
                         // true kui sammude ajalugu saab tühjaks. küsitakse uuesti paisktabeli parameetreid kui vaja
-                        alusta = yl.tagasi();
+                        alusta = context.tagasi();
                         break;
                     default:
                         System.out.println("Command not found!");

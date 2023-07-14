@@ -1,6 +1,5 @@
 package main.ylesanne;
 
-import main.Hindaja;
 import main.Hinnang;
 import main.Paisktabel;
 import main.samm.LõpetusSamm;
@@ -15,21 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static main.Hindaja.*;
+
 public class LisamiseYlesanne extends Ylesanne {
+
     private ArrayList<Integer> sisend;
+    private int kompesamm;
 
-    public LisamiseYlesanne(String faili_tee, Hindaja hindaja) throws IOException {
-        super(hindaja);
+    public LisamiseYlesanne(String faili_tee) throws IOException {
         loeSisend(faili_tee);
-        Paisktabel paisktabel = new Paisktabel(1, sisend.size());
 
-        super.määra(this, paisktabel, sisend);
-        setÕigeLäbimäng(leiaÕigeLäbimäng());
-    }
-
-    @Override
-    public String ylesandeKirjeldus() {
-        return "Lisa lahtise adresseerimisega paisktabelisse samas järjekorras järgmised elemendid: " + super.abiMassiiv.toString();
     }
 
     @Override
@@ -47,53 +41,84 @@ public class LisamiseYlesanne extends Ylesanne {
             for (String s : rida.split(" ")) {
                 sisend.add(Integer.parseInt(s.replaceAll("[\\[*\\]]","")));
             }
+            kompesamm = 1;
         }
+    }
+
+    @Override
+    public Paisktabel getPaisktabel() {
+        return new Paisktabel(kompesamm, sisend.size());
+    }
+
+    @Override
+    public ArrayList getAbimassiiv() {
+        return null;
+    }
+
+    @Override
+    public void paisktabeliParameetrid(float minElem, float maxElem, int elementideArv) {
+
     }
 
     @Override
     public ArrayList<Hinnang> leiaÕigeLäbimäng() {
         // õige läbimängu sammude leidmine
-        Paisktabel p = new Paisktabel(1, sisend.size());
+        Paisktabel p = new Paisktabel(kompesamm, sisend.size());
 
         ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 
         for (Integer arv : sisend) {
-            int räsi = paiskfunktsioon(arv);
+            int räsi = paiskfunktsioon(arv, p);
             int koht = p.leiaVabaKoht(räsi);
 
             if (räsi != koht)
-                õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, koht, 0), hindaja.RASKEOP, null, true));
-            else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, koht, 0), hindaja.LISAMINE, null, true));
+                õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, koht, 0), RASKEOP, null, true));
+            else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, koht, 0), LISAMINE, null, true));
 
             p.sisesta(koht, 0, arv);
         }
 
-        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), hindaja.LÕPP, null, true));
+        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), LÕPP, null, true));
         return õigeLäbimäng;
     }
 
     @Override
-    public Hinnang hindaSammu(Samm samm) {
+    public String ylesandeKirjeldus() {
+        return "Lisa lahtise adresseerimisega paisktabelisse samas järjekorras järgmised elemendid: " + sisend.toString();
+    }
+
+    @Override
+    public void astu(Hinnang hinnang) {
+
+    }
+
+    @Override
+    public void tagasi(Hinnang hinnang) {
+
+    }
+
+    @Override
+    public Hinnang hindaSammu(Samm samm, ArrayList abimassiiv, Paisktabel paisktabel) {
         // tagastab vea tüübi
 
         Samm õigeSamm = new LõpetusSamm();
 
-        if (abiMassiiv.size() > 0) { // veel on lisamata kirjeid
-            int arv = (int) abiMassiiv.get(0);
+        if (abimassiiv.size() > 0) { // veel on lisamata kirjeid
+            int arv = (int) abimassiiv.get(0);
 
-            int räsi = paiskfunktsioon(arv);
+            int räsi = paiskfunktsioon(arv, paisktabel);
             int vabaRäsi = paisktabel.leiaVabaKoht(räsi);
             õigeSamm = new SisestusSamm(0, vabaRäsi, 0);
 
             if (vabaRäsi == räsi) { // nihutamisi ei tehta
-                return new Hinnang(õigeSamm, hindaja.LISAMINE, samm, õigeSamm.equals(samm));
+                return new Hinnang(õigeSamm, LISAMINE, samm, õigeSamm.equals(samm));
             }
             else
-                return new Hinnang(õigeSamm, hindaja.RASKEOP, samm, õigeSamm.equals(samm));
+                return new Hinnang(õigeSamm, RASKEOP, samm, õigeSamm.equals(samm));
 
         }
         // algoritm lõpetab
-        return new Hinnang(õigeSamm, hindaja.LÕPP, samm, õigeSamm.equals(samm));
+        return new Hinnang(õigeSamm, LÕPP, samm, õigeSamm.equals(samm));
     }
 
 }

@@ -13,50 +13,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static main.Hindaja.*;
+
 public class PositsiooniYlesanne extends Ylesanne {
     private ArrayList<Integer> sisend;
+    private int kompesamm;
     private int maxElem;
     private int järk;
     private boolean sisestamine;
 
-    public PositsiooniYlesanne(String faili_tee, Hindaja hindaja) throws IOException {
-        super(hindaja);
+    public PositsiooniYlesanne(String faili_tee) throws IOException {
         loeSisend(faili_tee);
-
-        super.määra(this, new Paisktabel(0), sisend);
-        setÕigeLäbimäng(leiaÕigeLäbimäng());
     }
 
     public int paiskfunktsioon(int arv) {
         return (int) (arv / Math.pow(10, järk)) % 10;
     }
 
-    @Override
-    protected void astuJärg(Hinnang hinnang) {
-        if (hinnang.õige && hinnang.liik == hindaja.EEMALDAMINE && sisestamine) {
-            sisestamine = false;
-        }
-        if (hinnang.õige && hinnang.liik == hindaja.LISAMINE && !sisestamine) {
-            sisestamine = true;
-            järk++;
-        }
-    }
-
-    @Override
-    protected void tagasiJärg(Hinnang hinnang) {
-        if (hinnang.õige && hinnang.liik == hindaja.EEMALDAMINE && sisestamine) {
-            sisestamine = false;
-        }
-        if (hinnang.õige && hinnang.liik == hindaja.LISAMINE && !sisestamine) {
-            sisestamine = true;
-            järk--;
-        }
-    }
-
-    @Override
-    public String ylesandeKirjeldus() {
-        return "Järjestada positsioonimeetodil järgmised arvud: " + abiMassiiv;
-    }
 
     @Override
     public void loeSisend(String faili_tee) throws IOException {
@@ -76,7 +49,23 @@ public class PositsiooniYlesanne extends Ylesanne {
                 if (maxElem < elem) maxElem = elem;
                 sisend.add(elem);
             }
+            kompesamm = 0;
         }
+    }
+
+    @Override
+    public Paisktabel getPaisktabel() {
+        return new Paisktabel(kompesamm);
+    }
+
+    @Override
+    public ArrayList getAbimassiiv() {
+        return (ArrayList) sisend.clone();
+    }
+
+    @Override
+    public void paisktabeliParameetrid(float minElem, float maxElem, int elementideArv) {
+
     }
 
     @Override
@@ -86,7 +75,7 @@ public class PositsiooniYlesanne extends Ylesanne {
         ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 
         Paisktabel p = new Paisktabel(0, 10);
-        õigeLäbimäng.add(new Hinnang(new PaisktabeliLoomisSamm(10), hindaja.TABELIOP, null, true));
+        õigeLäbimäng.add(new Hinnang(new PaisktabeliLoomisSamm(10), TABELIOP, null, true));
 
         järk = 0;
         while ( (maxElem / Math.pow(10, järk)) > 1 ) {
@@ -98,8 +87,8 @@ public class PositsiooniYlesanne extends Ylesanne {
 
                 p.sisesta(räsi, i, arv);
 
-                if (i > 0) õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, räsi, i), hindaja.RASKEOP, null, true));
-                else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, räsi, i), hindaja.LISAMINE, null, true));
+                if (i > 0) õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, räsi, i), RASKEOP, null, true));
+                else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, räsi, i), LISAMINE, null, true));
             }
 
             sisend.clear();
@@ -107,14 +96,14 @@ public class PositsiooniYlesanne extends Ylesanne {
                 while (p.get(i).size() > 0){
                     sisend.add((Integer) p.get(i, 0));
                     p.eemalda(i, 0);
-                    õigeLäbimäng.add(new Hinnang(new EemaldusSamm(sisend.size()-1, i, 0), hindaja.EEMALDAMINE, null, true));
+                    õigeLäbimäng.add(new Hinnang(new EemaldusSamm(sisend.size()-1, i, 0), EEMALDAMINE, null, true));
                 }
             }
 
             järk++;
         }
 
-        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), hindaja.LÕPP, null, true));
+        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), LÕPP, null, true));
 
         järk = 0;
         sisestamine = true;
@@ -122,20 +111,47 @@ public class PositsiooniYlesanne extends Ylesanne {
     }
 
     @Override
-    public Hinnang hindaSammu(Samm samm) {
+    public String ylesandeKirjeldus() {
+        return "Järjestada positsioonimeetodil järgmised arvud: " + sisend.toString();
+    }
+
+    @Override
+    public void astu(Hinnang hinnang) {
+        if (hinnang.õige && hinnang.liik == EEMALDAMINE && sisestamine) {
+            sisestamine = false;
+        }
+        if (hinnang.õige && hinnang.liik == LISAMINE && !sisestamine) {
+            sisestamine = true;
+            järk++;
+        }
+    }
+
+    @Override
+    public void tagasi(Hinnang hinnang) {
+        if (hinnang.õige && hinnang.liik == EEMALDAMINE && sisestamine) {
+            sisestamine = false;
+        }
+        if (hinnang.õige && hinnang.liik == LISAMINE && !sisestamine) {
+            sisestamine = true;
+            järk--;
+        }
+    }
+
+    @Override
+    public Hinnang hindaSammu(Samm samm, ArrayList abimassiiv, Paisktabel paisktabel) {
         Samm õigeSamm = new LõpetusSamm();
 
 
         if (paisktabel.size() == 0) {
-            õigeSamm = new PaisktabeliLoomisSamm(abiMassiiv.size());
-            return new Hinnang(õigeSamm, hindaja.TABELIOP, samm, õigeSamm.equals(samm));
+            õigeSamm = new PaisktabeliLoomisSamm(abimassiiv.size());
+            return new Hinnang(õigeSamm, TABELIOP, samm, õigeSamm.equals(samm));
         }
 
         if ((maxElem / Math.pow(10, järk)) > 1) {
 
 
-            if (abiMassiiv.size() > 0 && sisestamine) {
-                int arv = (int) abiMassiiv.get(0);
+            if (abimassiiv.size() > 0 && sisestamine) {
+                int arv = (int) abimassiiv.get(0);
 
                 int räsi = paiskfunktsioon(arv);
                 int koht = paisktabel.get(räsi).size();
@@ -143,16 +159,16 @@ public class PositsiooniYlesanne extends Ylesanne {
                 õigeSamm = new SisestusSamm(0, räsi, koht);
 
                 if (koht == 0) { // Lisatakse tühja kimpu
-                    return new Hinnang(õigeSamm, hindaja.LISAMINE, samm, õigeSamm.equals(samm));
+                    return new Hinnang(õigeSamm, LISAMINE, samm, õigeSamm.equals(samm));
                 } else
-                    return new Hinnang(õigeSamm, hindaja.RASKEOP, samm, õigeSamm.equals(samm));
+                    return new Hinnang(õigeSamm, RASKEOP, samm, õigeSamm.equals(samm));
             }
 
             else {
                 for (int i = 0; i < paisktabel.size(); i++) {
                     if (paisktabel.get(i).size() > 0) {
-                        õigeSamm = new EemaldusSamm<Float>(abiMassiiv.size(), i, 0);
-                        return new Hinnang(õigeSamm, hindaja.EEMALDAMINE, samm, õigeSamm.equals(samm));
+                        õigeSamm = new EemaldusSamm<Float>(abimassiiv.size(), i, 0);
+                        return new Hinnang(õigeSamm, EEMALDAMINE, samm, õigeSamm.equals(samm));
                     }
                 }
             }
@@ -160,7 +176,7 @@ public class PositsiooniYlesanne extends Ylesanne {
 
         }
         // algoritm lõpetab
-        return new Hinnang(õigeSamm, hindaja.LÕPP, samm, õigeSamm.equals(samm));
+        return new Hinnang(õigeSamm, LÕPP, samm, õigeSamm.equals(samm));
 
 
     }

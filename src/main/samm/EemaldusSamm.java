@@ -1,6 +1,6 @@
 package main.samm;
 
-import main.ylesanne.Ylesanne;
+import main.Läbimäng;
 
 import java.util.Objects;
 
@@ -18,21 +18,21 @@ public class EemaldusSamm<T> extends Samm {
     }
 
     @Override
-    public boolean astu(Ylesanne ylesanne) {
-        element = (T) ylesanne.getPaisktabel().get(räsi, koht);
-        if (element == null || index >= ylesanne.getAbiMassiiv().size())
+    public boolean astu(Läbimäng läbimäng) {
+        element = (T) läbimäng.getPaisktabel().get(räsi, koht);
+        if (element == null || index >= läbimäng.getAbiMassiiv().size())
             return false;
 
-        ylesanne.getPaisktabel().eemalda(räsi, koht);
-        ylesanne.getAbiMassiiv().add(index, element);
+        läbimäng.getPaisktabel().eemalda(räsi, koht);
+        läbimäng.getAbiMassiiv().add(index, element);
 
         return true;
     }
 
     @Override
-    public boolean tagasi(Ylesanne ylesanne) {
-        ylesanne.getPaisktabel().sisesta(räsi, koht, element);
-        ylesanne.getAbiMassiiv().remove(index);
+    public boolean tagasi(Läbimäng läbimäng) {
+        läbimäng.getPaisktabel().sisesta(räsi, koht, element);
+        läbimäng.getAbiMassiiv().remove(index);
         return true;
     }
 

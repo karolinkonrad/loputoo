@@ -21,7 +21,7 @@ public class Hinnang {
             return "> " + tudengiSamm.toString() + "\n"
                     + liik;
         }
-        return "_VIGA_\n> " + tudengiSamm.toString() + "\n"
+        return "*VIGA*\n> " + tudengiSamm.toString() + "\n"
                 + "õige -> " + õigeSamm.toString() + "\n"
                 + liik;
     }

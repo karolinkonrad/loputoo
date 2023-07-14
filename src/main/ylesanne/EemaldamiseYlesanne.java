@@ -1,6 +1,5 @@
 package main.ylesanne;
 
-import main.Hindaja;
 import main.Hinnang;
 import main.Paisktabel;
 import main.samm.*;
@@ -14,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import static main.Hindaja.*;
+
 
 public class EemaldamiseYlesanne extends Ylesanne{
     private ArrayList<Integer> sisend;
@@ -22,36 +23,11 @@ public class EemaldamiseYlesanne extends Ylesanne{
     private int eemaldatavaRäsi;
     private HashMap<Integer, Integer> kompejadaAlgsedIndeksid;
     private int järg;
+    private int kompesamm;
 
 
-    public EemaldamiseYlesanne(String faili_tee, Hindaja hindaja) throws IOException {
-        super(hindaja);
-
+    public EemaldamiseYlesanne(String faili_tee) throws IOException {
         loeSisend(faili_tee);
-        Paisktabel paisktabel = new Paisktabel(1, sisend.size());
-        for (Integer arv : sisend) {
-            paisktabel.sisesta( paisktabel.leiaVabaKoht(paiskfunktsioon(arv)), 0, arv);
-        }
-
-        super.määra(this, paisktabel, new ArrayList<>());
-        setÕigeLäbimäng(leiaÕigeLäbimäng());
-    }
-
-    @Override
-    protected void astuJärg(Hinnang hinnang) {
-        if ((hinnang.liik == hindaja.EEMALDAMINE || hinnang.liik == hindaja.KUSTUTAMINE) && hinnang.õige)
-            järg++;
-    }
-
-    @Override
-    protected void tagasiJärg(Hinnang hinnang) {
-        if ((hinnang.liik == hindaja.EEMALDAMINE || hinnang.liik == hindaja.KUSTUTAMINE) && hinnang.õige)
-            järg--;
-    }
-
-    @Override
-    public String ylesandeKirjeldus() {
-        return "Eemalda lahtise adresseerimiesega paisktabelist " + eemaldatav;
     }
 
     @Override
@@ -70,27 +46,46 @@ public class EemaldamiseYlesanne extends Ylesanne{
                     eemaldatav = Integer.parseInt(s.replaceAll("[\\[*\\]]",""));
                 sisend.add(Integer.parseInt(s.replaceAll("[\\[*\\]]","")));
             }
-
+            kompesamm = 1;
         }
+    }
+
+    @Override
+    public Paisktabel getPaisktabel() {
+        Paisktabel paisktabel = new Paisktabel(kompesamm, sisend.size());
+        for (Integer arv : sisend) {
+            paisktabel.sisesta( paisktabel.leiaVabaKoht(paiskfunktsioon(arv, paisktabel)), 0, arv);
+        }
+        return paisktabel;
+    }
+
+    @Override
+    public ArrayList getAbimassiiv() {
+        return new ArrayList<Integer>();
+    }
+
+    @Override
+    public void paisktabeliParameetrid(float minElem, float maxElem, int elementideArv) {
+
     }
 
     @Override
     public ArrayList<Hinnang> leiaÕigeLäbimäng() {
         // õige läbimängu sammude leidmine
 
-        Paisktabel p = new Paisktabel(1, sisend.size());
+        Paisktabel p = getPaisktabel();
 
         for (Integer arv : sisend) {
-            p.sisesta( p.leiaVabaKoht(paiskfunktsioon(arv)),0, arv);
+            p.sisesta( p.leiaVabaKoht(paiskfunktsioon(arv, p)),0, arv);
         }
 
         kompejadaAlgsedIndeksid = new HashMap<>();
         ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 
-        eemaldatavaRäsi = p.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav));
+        eemaldatavaRäsi = p.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav, p));
         p.eemalda(eemaldatavaRäsi, 0);
 
-        õigeLäbimäng.add(new Hinnang(new EemaldusSamm(0, eemaldatavaRäsi, 0), hindaja.KUSTUTAMINE, null, true));
+        õigeLäbimäng.add(new Hinnang(new EemaldusSamm(0, eemaldatavaRäsi, 0), KUSTUTAMINE, null, true));
 
         int i = eemaldatavaRäsi;
 
@@ -103,16 +98,16 @@ public class EemaldamiseYlesanne extends Ylesanne{
             int arv = (int) p.get(i, 0);
             kompejadaAlgsedIndeksid.put(arv, i);
             p.eemalda(i, 0);
-            õigeLäbimäng.add(new Hinnang(new EemaldusSamm(0, i, 0), hindaja.EEMALDAMINE, null, true));
+            õigeLäbimäng.add(new Hinnang(new EemaldusSamm(0, i, 0), EEMALDAMINE, null, true));
 
-            int uusKoht = p.leiaVabaKoht(paiskfunktsioon(arv));
+            int uusKoht = p.leiaVabaKoht(paiskfunktsioon(arv, p));
             if (uusKoht != i)
-                õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, uusKoht, 0), hindaja.RASKEOP, null, true));
-            else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, uusKoht, 0), hindaja.LISAMINE, null, true));
+                õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, uusKoht, 0), RASKEOP, null, true));
+            else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, uusKoht, 0), LISAMINE, null, true));
             p.sisesta(uusKoht, 0, arv);
 
         }
-        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), hindaja.LÕPP, null, true));
+        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), LÕPP, null, true));
 
         järg = 0;
 
@@ -120,31 +115,48 @@ public class EemaldamiseYlesanne extends Ylesanne{
     }
 
     @Override
-    public Hinnang hindaSammu(Samm samm) {
+    public String ylesandeKirjeldus() {
+        return "Eemalda lahtise adresseerimiesega paisktabelist " + eemaldatav;
+    }
+
+    @Override
+    public void astu(Hinnang hinnang) {
+        if ((hinnang.liik == EEMALDAMINE || hinnang.liik == KUSTUTAMINE) && hinnang.õige)
+            järg++;
+    }
+
+    @Override
+    public void tagasi(Hinnang hinnang) {
+        if ((hinnang.liik == EEMALDAMINE || hinnang.liik == KUSTUTAMINE) && hinnang.õige)
+            järg--;
+    }
+
+    @Override
+    public Hinnang hindaSammu(Samm samm, ArrayList abimassiiv, Paisktabel paisktabel) {
         Samm õigeSamm = new LõpetusSamm();
 
 
-        if (abiMassiiv.size() == 0) { // kas eemaldatav on eemaldatud?
-            int eemaldatavaVõti = paisktabel.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav));
+        if (abimassiiv.size() == 0) { // kas eemaldatav on eemaldatud?
+            int eemaldatavaVõti = paisktabel.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav, paisktabel));
             õigeSamm = new EemaldusSamm(0, eemaldatavaVõti, 0);
 
-            return new Hinnang(õigeSamm, hindaja.KUSTUTAMINE, samm, õigeSamm.equals(samm));
+            return new Hinnang(õigeSamm, KUSTUTAMINE, samm, õigeSamm.equals(samm));
         }
 
         // kompejada läbimine
 
-        if (abiMassiiv.size() > 1) { // kas on kirjeid tagasi panna?
-            int arv = (int) abiMassiiv.get(0);
-            int räsi = paiskfunktsioon(arv);
+        if (abimassiiv.size() > 1) { // kas on kirjeid tagasi panna?
+            int arv = (int) abimassiiv.get(0);
+            int räsi = paiskfunktsioon(arv, paisktabel);
             int vabaRäsi = paisktabel.leiaVabaKoht(räsi);
 
             õigeSamm = new SisestusSamm(0, vabaRäsi, 0);
 
             if (vabaRäsi != kompejadaAlgsedIndeksid.get(arv)) { // kas uus vabaRäsi on erinev vanast võtmest?
-                return new Hinnang(õigeSamm, hindaja.RASKEOP, samm, õigeSamm.equals(samm));
+                return new Hinnang(õigeSamm, RASKEOP, samm, õigeSamm.equals(samm));
             }
             else
-                return new Hinnang(õigeSamm, hindaja.LISAMINE, samm, õigeSamm.equals(samm));
+                return new Hinnang(õigeSamm, LISAMINE, samm, õigeSamm.equals(samm));
         }
 
         // kas on kirjeid vales kohas?
@@ -152,10 +164,10 @@ public class EemaldamiseYlesanne extends Ylesanne{
         if (järg >= paisktabel.size()) järg = 0;
         if (järg == eemaldatavaRäsi || paisktabel.get(järg).size() == 0)
             // algoritm lõpetab 
-            return new Hinnang(õigeSamm, hindaja.LÕPP, samm, õigeSamm.equals(samm));
+            return new Hinnang(õigeSamm, LÕPP, samm, õigeSamm.equals(samm));
 
         õigeSamm = new EemaldusSamm(0, järg, 0);
-        return new Hinnang(õigeSamm, hindaja.EEMALDAMINE, samm, õigeSamm.equals(samm));
+        return new Hinnang(õigeSamm, EEMALDAMINE, samm, õigeSamm.equals(samm));
         
     }
 
