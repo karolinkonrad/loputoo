@@ -12,7 +12,7 @@ public class Läbimäng<T> {
 
     private Ylesanne ylesanne;
     private Paisktabel<T> paisktabel;
-    private ArrayList<T> abiMassiiv;
+    private ArrayList<T> abijärjend;
     private ArrayList<Hinnang> õigeLäbimäng;
 
     private Logija logija;
@@ -26,7 +26,7 @@ public class Läbimäng<T> {
 
         this.ylesanne = ylesanne;
         this.paisktabel = ylesanne.getPaisktabel();
-        this.abiMassiiv = ylesanne.getAbimassiiv();
+        this.abijärjend = ylesanne.getAbijärjend();
         this.õigeLäbimäng = ylesanne.leiaÕigeLäbimäng();
 
         this.logija = new Logija();
@@ -43,8 +43,8 @@ public class Läbimäng<T> {
     public Paisktabel<T> getPaisktabel() {
         return paisktabel;
     }
-    public ArrayList<T> getAbiMassiiv() {
-        return abiMassiiv;
+    public ArrayList<T> getAbijärjend() {
+        return abijärjend;
     }
 
     public float getPunktid() {
@@ -52,18 +52,21 @@ public class Läbimäng<T> {
     }
 
     public boolean astu(Samm samm) {
-        Hinnang hinnang = ylesanne.hindaSammu(samm, abiMassiiv, paisktabel);
+        Hinnang hinnang = ylesanne.hindaSammu(samm, abijärjend, paisktabel);
+        läbimäng.push(hinnang);
+
+        logija.logi(abijärjend.toString() + "\n"
+                + paisktabel.toString() + "\n"
+                + "---------------------------------------------------------\n"
+                + hinnang.toString());
+
         if (samm.astu(this)) {
             ylesanne.astu(hinnang);
-            läbimäng.push(hinnang);
-
-            logija.logi("---------------------------------------------------------\n"
-                    + abiMassiiv.toString() + "\n"
-                    + paisktabel.toString() + "\n"
-                    + hinnang.toString());
 
             return true;
         }
+        logija.logi("   VIGANE SAMM");
+        läbimäng.pop();
         return false;
     }
 
@@ -75,7 +78,7 @@ public class Läbimäng<T> {
         if (hinnang.tudengiSamm.tagasi(this)) {
             ylesanne.tagasi(hinnang);
             logija.logi("---------------------------------------------------------\n"
-                    + abiMassiiv.toString() + "\n"
+                    + abijärjend.toString() + "\n"
                     + paisktabel.toString() + "\nTAGASI:\n"
                     + hinnang);
         }

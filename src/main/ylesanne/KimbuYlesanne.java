@@ -72,7 +72,7 @@ public class KimbuYlesanne extends Ylesanne {
     }
 
     @Override
-    public ArrayList getAbimassiiv() {
+    public ArrayList getAbijärjend() {
         return (ArrayList) sisend.clone();
     }
 
@@ -139,7 +139,7 @@ public class KimbuYlesanne extends Ylesanne {
     }
 
     @Override
-    public Hinnang hindaSammu(Samm samm, ArrayList abimassiiv, Paisktabel paisktabel) {
+    public Hinnang hindaSammu(Samm samm, ArrayList abijärjend, Paisktabel paisktabel) {
         // tagastab vea tüübi
 
         Samm õigeSamm = new LõpetusSamm();
@@ -149,8 +149,8 @@ public class KimbuYlesanne extends Ylesanne {
             return new Hinnang(õigeSamm, TABELIOP, samm, õigeSamm.equals(samm));
         }
 
-        if (abimassiiv.size() > 0 && järg == 0) { // veel on lisamata kirjeid
-            float arv = (float) abimassiiv.get(0);
+        if (abijärjend.size() > 0 && järg == 0) { // veel on lisamata kirjeid
+            float arv = (float) abijärjend.get(0);
 
             int räsi = paiskfunktsioon(arv);
             int i;
@@ -169,7 +169,7 @@ public class KimbuYlesanne extends Ylesanne {
         else {
             for (int i = 0; i < paisktabel.size(); i++) {
                 if (paisktabel.get(i).size() > 0) {
-                    õigeSamm = new EemaldusSamm<Float>(abimassiiv.size(), i, 0);
+                    õigeSamm = new EemaldusSamm<Float>(abijärjend.size(), i, 0);
                     return new Hinnang(õigeSamm, EEMALDAMINE, samm, õigeSamm.equals(samm));
                 }
             }

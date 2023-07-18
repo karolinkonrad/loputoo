@@ -11,6 +11,11 @@ public class Logija {
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy-hhmmss.SSS");
         String dir = System.getProperty("user.dir") + "/läbimängud/";
 
+        File theDir = new File(dir);
+        if (!theDir.exists()){
+            theDir.mkdirs();
+        }
+
         fail = new File( dir + sdf.format( new Date() ) + ".txt");
     }
 

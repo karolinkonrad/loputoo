@@ -13,7 +13,7 @@ public abstract class Ylesanne<T> {
 
     abstract public void loeSisend(String faili_tee) throws IOException;
     abstract public Paisktabel<T> getPaisktabel();
-    abstract public ArrayList<T> getAbimassiiv();
+    abstract public ArrayList<T> getAbijärjend();
     abstract public void paisktabeliParameetrid(float minElem, float maxElem, int elementideArv);
     abstract public ArrayList<Hinnang> leiaÕigeLäbimäng();
 

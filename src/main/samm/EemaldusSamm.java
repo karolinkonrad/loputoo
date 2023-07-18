@@ -20,11 +20,11 @@ public class EemaldusSamm<T> extends Samm {
     @Override
     public boolean astu(Läbimäng läbimäng) {
         element = (T) läbimäng.getPaisktabel().get(räsi, koht);
-        if (element == null || index >= läbimäng.getAbiMassiiv().size())
+        if (element == null || index > läbimäng.getAbijärjend().size())
             return false;
 
         läbimäng.getPaisktabel().eemalda(räsi, koht);
-        läbimäng.getAbiMassiiv().add(index, element);
+        läbimäng.getAbijärjend().add(index, element);
 
         return true;
     }
@@ -32,7 +32,7 @@ public class EemaldusSamm<T> extends Samm {
     @Override
     public boolean tagasi(Läbimäng läbimäng) {
         läbimäng.getPaisktabel().sisesta(räsi, koht, element);
-        läbimäng.getAbiMassiiv().remove(index);
+        läbimäng.getAbijärjend().remove(index);
         return true;
     }
 

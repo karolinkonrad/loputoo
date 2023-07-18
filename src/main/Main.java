@@ -77,7 +77,7 @@ public class Main {
             }
 
             System.out.println("-----------------------------------------------------------");
-            System.out.println("massiiv: " + context.getAbiMassiiv().toString());
+            System.out.println("järjend: " + context.getAbijärjend().toString());
             System.out.println("paisktabel: " + context.getPaisktabel().toString());
             System.out.println("""
                     l - algoritm lõpetab

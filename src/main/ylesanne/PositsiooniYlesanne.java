@@ -59,7 +59,7 @@ public class PositsiooniYlesanne extends Ylesanne {
     }
 
     @Override
-    public ArrayList getAbimassiiv() {
+    public ArrayList getAbijärjend() {
         return (ArrayList) sisend.clone();
     }
 
@@ -138,20 +138,20 @@ public class PositsiooniYlesanne extends Ylesanne {
     }
 
     @Override
-    public Hinnang hindaSammu(Samm samm, ArrayList abimassiiv, Paisktabel paisktabel) {
+    public Hinnang hindaSammu(Samm samm, ArrayList abijärjend, Paisktabel paisktabel) {
         Samm õigeSamm = new LõpetusSamm();
 
 
         if (paisktabel.size() == 0) {
-            õigeSamm = new PaisktabeliLoomisSamm(abimassiiv.size());
+            õigeSamm = new PaisktabeliLoomisSamm(abijärjend.size());
             return new Hinnang(õigeSamm, TABELIOP, samm, õigeSamm.equals(samm));
         }
 
         if ((maxElem / Math.pow(10, järk)) > 1) {
 
 
-            if (abimassiiv.size() > 0 && sisestamine) {
-                int arv = (int) abimassiiv.get(0);
+            if (abijärjend.size() > 0 && sisestamine) {
+                int arv = (int) abijärjend.get(0);
 
                 int räsi = paiskfunktsioon(arv);
                 int koht = paisktabel.get(räsi).size();
@@ -167,7 +167,7 @@ public class PositsiooniYlesanne extends Ylesanne {
             else {
                 for (int i = 0; i < paisktabel.size(); i++) {
                     if (paisktabel.get(i).size() > 0) {
-                        õigeSamm = new EemaldusSamm<Float>(abimassiiv.size(), i, 0);
+                        õigeSamm = new EemaldusSamm<Float>(abijärjend.size(), i, 0);
                         return new Hinnang(õigeSamm, EEMALDAMINE, samm, õigeSamm.equals(samm));
                     }
                 }

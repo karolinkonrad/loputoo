@@ -19,12 +19,12 @@ public class SisestusSamm<T> extends Samm {
 
     @Override
     public boolean astu(Läbimäng läbimäng) {
-        element = (T) läbimäng.getAbiMassiiv().get(index);
-        if (element == null || räsi >= läbimäng.getPaisktabel().size() || koht > läbimäng.getPaisktabel().get(räsi).size())
+        if (läbimäng.getAbijärjend().size() <= index || räsi >= läbimäng.getPaisktabel().size() || koht > läbimäng.getPaisktabel().get(räsi).size())
             return false;
 
+        element = (T) läbimäng.getAbijärjend().get(index);
         läbimäng.getPaisktabel().sisesta(räsi, koht, element);
-        läbimäng.getAbiMassiiv().remove(index);
+        läbimäng.getAbijärjend().remove(index);
 
         return true;
     }
@@ -32,7 +32,7 @@ public class SisestusSamm<T> extends Samm {
     @Override
     public boolean tagasi(Läbimäng läbimäng) {
         läbimäng.getPaisktabel().eemalda(räsi, koht);
-        läbimäng.getAbiMassiiv().add(index, element);
+        läbimäng.getAbijärjend().add(index, element);
         return true;
     }
 

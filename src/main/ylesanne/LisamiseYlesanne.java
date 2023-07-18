@@ -51,8 +51,8 @@ public class LisamiseYlesanne extends Ylesanne {
     }
 
     @Override
-    public ArrayList getAbimassiiv() {
-        return null;
+    public ArrayList getAbijärjend() {
+        return (ArrayList) sisend.clone();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class LisamiseYlesanne extends Ylesanne {
     @Override
     public ArrayList<Hinnang> leiaÕigeLäbimäng() {
         // õige läbimängu sammude leidmine
-        Paisktabel p = new Paisktabel(kompesamm, sisend.size());
+        Paisktabel p = getPaisktabel();
 
         ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 
@@ -98,13 +98,13 @@ public class LisamiseYlesanne extends Ylesanne {
     }
 
     @Override
-    public Hinnang hindaSammu(Samm samm, ArrayList abimassiiv, Paisktabel paisktabel) {
+    public Hinnang hindaSammu(Samm samm, ArrayList abijärjend, Paisktabel paisktabel) {
         // tagastab vea tüübi
 
         Samm õigeSamm = new LõpetusSamm();
 
-        if (abimassiiv.size() > 0) { // veel on lisamata kirjeid
-            int arv = (int) abimassiiv.get(0);
+        if (abijärjend.size() > 0) { // veel on lisamata kirjeid
+            int arv = (int) abijärjend.get(0);
 
             int räsi = paiskfunktsioon(arv, paisktabel);
             int vabaRäsi = paisktabel.leiaVabaKoht(räsi);

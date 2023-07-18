@@ -60,7 +60,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
     }
 
     @Override
-    public ArrayList getAbimassiiv() {
+    public ArrayList getAbijärjend() {
         return new ArrayList<Integer>();
     }
 
@@ -74,10 +74,6 @@ public class EemaldamiseYlesanne extends Ylesanne{
         // õige läbimängu sammude leidmine
 
         Paisktabel p = getPaisktabel();
-
-        for (Integer arv : sisend) {
-            p.sisesta( p.leiaVabaKoht(paiskfunktsioon(arv, p)),0, arv);
-        }
 
         kompejadaAlgsedIndeksid = new HashMap<>();
         ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
@@ -132,11 +128,11 @@ public class EemaldamiseYlesanne extends Ylesanne{
     }
 
     @Override
-    public Hinnang hindaSammu(Samm samm, ArrayList abimassiiv, Paisktabel paisktabel) {
+    public Hinnang hindaSammu(Samm samm, ArrayList abijärjend, Paisktabel paisktabel) {
         Samm õigeSamm = new LõpetusSamm();
 
 
-        if (abimassiiv.size() == 0) { // kas eemaldatav on eemaldatud?
+        if (abijärjend.size() == 0) { // kas eemaldatav on eemaldatud?
             int eemaldatavaVõti = paisktabel.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav, paisktabel));
             õigeSamm = new EemaldusSamm(0, eemaldatavaVõti, 0);
 
@@ -145,8 +141,8 @@ public class EemaldamiseYlesanne extends Ylesanne{
 
         // kompejada läbimine
 
-        if (abimassiiv.size() > 1) { // kas on kirjeid tagasi panna?
-            int arv = (int) abimassiiv.get(0);
+        if (abijärjend.size() > 1) { // kas on kirjeid tagasi panna?
+            int arv = (int) abijärjend.get(0);
             int räsi = paiskfunktsioon(arv, paisktabel);
             int vabaRäsi = paisktabel.leiaVabaKoht(räsi);
 
