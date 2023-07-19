@@ -112,7 +112,8 @@ public class EemaldamiseYlesanne extends Ylesanne{
 
     @Override
     public String ylesandeKirjeldus() {
-        return "Eemalda lahtise adresseerimiesega paisktabelist " + eemaldatav;
+        return "Olgu lahtise adresseerimisega paisktabelil jääkpaiskamine, kompesamm " + kompesamm + " ja ridu " + sisend.size()
+                + "Eemalda lahtise adresseerimiesega paisktabelist " + eemaldatav;
     }
 
     @Override

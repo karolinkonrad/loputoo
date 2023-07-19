@@ -135,7 +135,7 @@ public class KimbuYlesanne extends Ylesanne {
 
     @Override
     public String ylesandeKirjeldus() {
-        return "Järjestada kimbumeetodil järgmised arvud: " + sisend.toString();
+        return "Järjestada ahel kimbumeetodil" + sisend.toString();
     }
 
     @Override

@@ -84,7 +84,8 @@ public class LisamiseYlesanne extends Ylesanne {
 
     @Override
     public String ylesandeKirjeldus() {
-        return "Lisa lahtise adresseerimisega paisktabelisse samas järjekorras järgmised elemendid: " + sisend.toString();
+        return "Olgu lahtise adresseerimisega paisktabelil jääkpaiskamine, kompesamm " + kompesamm + " ja ridu " + sisend.size()
+                + ".\nLisa paisktabelisse samas järjekorras järgmised elemendid: " + sisend.toString();
     }
 
     @Override

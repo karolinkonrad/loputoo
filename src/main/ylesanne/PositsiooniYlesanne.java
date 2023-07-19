@@ -112,7 +112,7 @@ public class PositsiooniYlesanne extends Ylesanne {
 
     @Override
     public String ylesandeKirjeldus() {
-        return "Järjestada positsioonimeetodil järgmised arvud: " + sisend.toString();
+        return "Järjestada ahel positsioonimeetodil: " + sisend.toString();
     }
 
     @Override
