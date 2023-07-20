@@ -1,15 +1,10 @@
 package main.samm;
 
-
 import main.Läbimäng;
 
-public abstract class Samm{
-    abstract public boolean astu(Läbimäng läbimäng);
-
-    abstract public boolean tagasi(Läbimäng läbimäng);
-
-    public abstract boolean equals(Object o);
-
-    public abstract String toString();
+public interface Samm {
+    boolean astu(Läbimäng läbimäng);
+    boolean tagasi(Läbimäng läbimäng);
+    boolean equals(Object o);
+    String toString();
 }
-

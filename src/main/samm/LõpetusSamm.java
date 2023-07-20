@@ -2,7 +2,7 @@ package main.samm;
 
 import main.Läbimäng;
 
-public class LõpetusSamm extends Samm {
+public class LõpetusSamm implements Samm {
     // kuidagi seotud hindamisega
 
     @Override

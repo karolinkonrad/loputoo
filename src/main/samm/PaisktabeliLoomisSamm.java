@@ -4,7 +4,7 @@ import main.Läbimäng;
 
 import java.util.Objects;
 
-public class PaisktabeliLoomisSamm extends Samm {
+public class PaisktabeliLoomisSamm implements Samm {
     private final float minElement;
     private final float maxElement;
     private final int paisktabeliPikkus;

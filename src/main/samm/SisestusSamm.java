@@ -4,7 +4,7 @@ import main.Läbimäng;
 
 import java.util.Objects;
 
-public class SisestusSamm<T> extends Samm {
+public class SisestusSamm<T> implements Samm {
     private final int index; //indeks abimassiivis
     private final int räsi; //võti paisktabelis
     private final int koht; //koht ahelas
