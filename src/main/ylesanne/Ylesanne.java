@@ -1,6 +1,7 @@
 package main.ylesanne;
 
 import main.Hinnang;
+import main.Läbimäng;
 import main.Paisktabel;
 import main.samm.Samm;
 
@@ -18,8 +19,8 @@ public abstract class Ylesanne<T> {
     abstract public ArrayList<Hinnang> leiaÕigeLäbimäng();
 
     abstract public String ylesandeKirjeldus();
-    abstract public void astu(Hinnang hinnang);
-    abstract public void tagasi(Hinnang hinnang);
+    abstract public void astu(Läbimäng läbimäng, Hinnang hinnang);
+    abstract public void tagasi(Läbimäng läbimäng, Hinnang hinnang);
     abstract public Hinnang hindaSammu(Samm samm, ArrayList<T> abimassiiv, Paisktabel<T> paisktabel);
 
 }

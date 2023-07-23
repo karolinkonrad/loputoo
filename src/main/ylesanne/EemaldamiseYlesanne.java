@@ -1,6 +1,7 @@
 package main.ylesanne;
 
 import main.Hinnang;
+import main.Läbimäng;
 import main.Paisktabel;
 import main.samm.*;
 
@@ -105,7 +106,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
         }
         õigeLäbimäng.add(new Hinnang(new LõpetamiseSamm(), LÕPP, null, true));
 
-        järg = 0;
+        järg = eemaldatavaRäsi;
 
         return õigeLäbimäng;
     }
@@ -113,17 +114,17 @@ public class EemaldamiseYlesanne extends Ylesanne{
     @Override
     public String ylesandeKirjeldus() {
         return "Olgu lahtise adresseerimisega paisktabelil jääkpaiskamine, kompesamm " + kompesamm + " ja ridu " + sisend.size()
-                + "Eemalda lahtise adresseerimiesega paisktabelist " + eemaldatav;
+                + ".\nEemalda lahtise adresseerimiesega paisktabelist " + eemaldatav;
     }
 
     @Override
-    public void astu(Hinnang hinnang) {
+    public void astu(Läbimäng läbimäng, Hinnang hinnang) {
         if ((hinnang.olek == EEMALDAMINE || hinnang.olek == KUSTUTAMINE) && hinnang.õige)
             järg++;
     }
 
     @Override
-    public void tagasi(Hinnang hinnang) {
+    public void tagasi(Läbimäng läbimäng, Hinnang hinnang) {
         if ((hinnang.olek == EEMALDAMINE || hinnang.olek == KUSTUTAMINE) && hinnang.õige)
             järg--;
     }

@@ -1,6 +1,7 @@
 package main.ylesanne;
 
 import main.Hinnang;
+import main.Läbimäng;
 import main.Paisktabel;
 import main.samm.*;
 
@@ -21,7 +22,7 @@ public class KimbuYlesanne extends Ylesanne{
     private int elementideArv;
     private float minElem;
     private float maxElem;
-    private int järg;
+    private boolean sisestamine;
 
     private int tudengiElementideArv;
     private float tudengiMinElem;
@@ -119,23 +120,26 @@ public class KimbuYlesanne extends Ylesanne{
 
         õigeLäbimäng.add(new Hinnang(new LõpetamiseSamm(), LÕPP, null, true));
 
-        järg = 0;
+        sisestamine = true;
         return õigeLäbimäng;
     }
 
     @Override
-    public void astu(Hinnang hinnang) {
-        if (hinnang.olek == EEMALDAMINE && hinnang.õige) järg++;
+    public void astu(Läbimäng läbimäng, Hinnang hinnang) {
+        if (läbimäng.getAbijärjend().size() == 0 && sisestamine)
+            sisestamine = false;
     }
 
     @Override
-    public void tagasi(Hinnang hinnang) {
-        if (hinnang.olek == EEMALDAMINE && hinnang.õige) järg--;
+    public void tagasi(Läbimäng läbimäng, Hinnang hinnang) {
+        if (läbimäng.getAbijärjend().size() == 1 && !sisestamine
+                && (hinnang.olek == LISAMINE || hinnang.olek == RASKEOP))
+            sisestamine = true;
     }
 
     @Override
     public String ylesandeKirjeldus() {
-        return "Järjestada ahel kimbumeetodil" + sisend.toString();
+        return "Järjestada ahel kimbumeetodil: " + sisend.toString();
     }
 
     @Override
@@ -149,7 +153,7 @@ public class KimbuYlesanne extends Ylesanne{
             return new Hinnang(õigeSamm, TABELIOP, samm, õigeSamm.equals(samm));
         }
 
-        if (abijärjend.size() > 0 && järg == 0) { // veel on lisamata kirjeid
+        if (abijärjend.size() > 0 && sisestamine) { // veel on lisamata kirjeid
             float arv = (float) abijärjend.get(0);
 
             int räsi = paiskfunktsioon(arv);

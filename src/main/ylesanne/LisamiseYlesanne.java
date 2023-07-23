@@ -1,6 +1,7 @@
 package main.ylesanne;
 
 import main.Hinnang;
+import main.Läbimäng;
 import main.Paisktabel;
 import main.samm.LõpetamiseSamm;
 import main.samm.Samm;
@@ -89,12 +90,12 @@ public class LisamiseYlesanne extends Ylesanne {
     }
 
     @Override
-    public void astu(Hinnang hinnang) {
+    public void astu(Läbimäng läbimäng, Hinnang hinnang) {
 
     }
 
     @Override
-    public void tagasi(Hinnang hinnang) {
+    public void tagasi(Läbimäng läbimäng, Hinnang hinnang) {
 
     }
 

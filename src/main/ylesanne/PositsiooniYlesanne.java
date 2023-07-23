@@ -1,6 +1,7 @@
 package main.ylesanne;
 
 import main.Hinnang;
+import main.Läbimäng;
 import main.Paisktabel;
 import main.samm.*;
 
@@ -115,23 +116,27 @@ public class PositsiooniYlesanne extends Ylesanne {
     }
 
     @Override
-    public void astu(Hinnang hinnang) {
-        if (hinnang.õige && hinnang.olek == EEMALDAMINE && sisestamine) {
+    public void astu(Läbimäng läbimäng, Hinnang hinnang) {
+        if (läbimäng.getAbijärjend().size() == 0 && sisestamine) {
             sisestamine = false;
         }
-        if (hinnang.õige && hinnang.olek == LISAMINE && !sisestamine) {
+        if (läbimäng.getAbijärjend().size() == sisend.size() && !sisestamine) {
             sisestamine = true;
             järk++;
         }
     }
 
     @Override
-    public void tagasi(Hinnang hinnang) {
-        if (hinnang.õige && hinnang.olek == EEMALDAMINE && sisestamine) {
-            sisestamine = false;
-        }
-        if (hinnang.õige && hinnang.olek == LISAMINE && !sisestamine) {
+    public void tagasi(Läbimäng läbimäng, Hinnang hinnang) {
+        if (läbimäng.getAbijärjend().size() == 1 && !sisestamine
+                && (hinnang.olek == LISAMINE || hinnang.olek == RASKEOP)) {
+
             sisestamine = true;
+        }
+        if (läbimäng.getAbijärjend().size() == sisend.size()-1
+                && sisestamine && hinnang.olek == EEMALDAMINE) {
+
+            sisestamine = false;
             järk--;
         }
     }

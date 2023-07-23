@@ -61,7 +61,7 @@ public class Läbimäng<T> {
                 + hinnang.toString());
 
         if (samm.astu(this)) {
-            ylesanne.astu(hinnang);
+            ylesanne.astu(this, hinnang);
 
             return true;
         }
@@ -76,10 +76,10 @@ public class Läbimäng<T> {
 
         Hinnang hinnang = läbimäng.pop();
         if (hinnang.tudengiSamm.tagasi(this)) {
-            ylesanne.tagasi(hinnang);
-            logija.logi("---------------------------------------------------------\n"
-                    + abijärjend.toString() + "\n"
-                    + paisktabel.toString() + "\nTAGASI:\n"
+            ylesanne.tagasi(this, hinnang);
+            logija.logi(abijärjend.toString() + "\n"
+                    + paisktabel.toString() + "---------------------------------------------------------\n"
+                    + "\nTAGASI:\n"
                     + hinnang);
         }
         else
