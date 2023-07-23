@@ -14,7 +14,7 @@ import java.util.Random;
 
 import static main.Hindaja.*;
 
-public class KimbuYlesanne extends Ylesanne {
+public class KimbuYlesanne extends Ylesanne{
     private ArrayList<Float> sisend;
     private int kompesamm;
 
@@ -92,7 +92,7 @@ public class KimbuYlesanne extends Ylesanne {
         elementideArv = sisend.size();
 
         Paisktabel p = new Paisktabel(0, elementideArv);
-        õigeLäbimäng.add(new Hinnang(new PaisktabeliLoomisSamm(minElem, maxElem, elementideArv), TABELIOP, null, true));
+        õigeLäbimäng.add(new Hinnang(new PaisktabeliLoomiseSamm(minElem, maxElem, elementideArv), TABELIOP, null, true));
 
         for (Float arv : sisend) {
             int räsi = paiskfunktsioon(arv);
@@ -102,8 +102,8 @@ public class KimbuYlesanne extends Ylesanne {
                 if (arv <= (float) p.get(räsi, i)) break;
             }
 
-            if (p.get(räsi).size() > 0) õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, räsi, i), RASKEOP, null, true));
-            else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, räsi, i), LISAMINE, null, true));
+            if (p.get(räsi).size() > 0) õigeLäbimäng.add(new Hinnang(new SisestamiseSamm(0, räsi, i), RASKEOP, null, true));
+            else õigeLäbimäng.add(new Hinnang(new SisestamiseSamm(0, räsi, i), LISAMINE, null, true));
 
             p.sisesta(räsi, i, arv);
         }
@@ -113,11 +113,11 @@ public class KimbuYlesanne extends Ylesanne {
             while (p.get(i).size() > 0){
                 sisend.add((Float) p.get(i, 0));
                 p.eemalda(i, 0);
-                õigeLäbimäng.add(new Hinnang(new EemaldusSamm(sisend.size()-1, i, 0), EEMALDAMINE, null, true));
+                õigeLäbimäng.add(new Hinnang(new EemaldamiseSamm(sisend.size()-1, i, 0), EEMALDAMINE, null, true));
             }
         }
 
-        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), LÕPP, null, true));
+        õigeLäbimäng.add(new Hinnang(new LõpetamiseSamm(), LÕPP, null, true));
 
         järg = 0;
         return õigeLäbimäng;
@@ -125,12 +125,12 @@ public class KimbuYlesanne extends Ylesanne {
 
     @Override
     public void astu(Hinnang hinnang) {
-        if (hinnang.liik == EEMALDAMINE && hinnang.õige) järg++;
+        if (hinnang.olek == EEMALDAMINE && hinnang.õige) järg++;
     }
 
     @Override
     public void tagasi(Hinnang hinnang) {
-        if (hinnang.liik == EEMALDAMINE && hinnang.õige) järg--;
+        if (hinnang.olek == EEMALDAMINE && hinnang.õige) järg--;
     }
 
     @Override
@@ -142,10 +142,10 @@ public class KimbuYlesanne extends Ylesanne {
     public Hinnang hindaSammu(Samm samm, ArrayList abijärjend, Paisktabel paisktabel) {
         // tagastab vea tüübi
 
-        Samm õigeSamm = new LõpetusSamm();
+        Samm õigeSamm = new LõpetamiseSamm();
 
         if (paisktabel.size() == 0) {
-            õigeSamm = new PaisktabeliLoomisSamm(minElem, maxElem, elementideArv);
+            õigeSamm = new PaisktabeliLoomiseSamm(minElem, maxElem, elementideArv);
             return new Hinnang(õigeSamm, TABELIOP, samm, õigeSamm.equals(samm));
         }
 
@@ -157,7 +157,7 @@ public class KimbuYlesanne extends Ylesanne {
             for (i = 0; i < paisktabel.get(räsi).size(); i++) {
                 if (arv <= (float) paisktabel.get(räsi, i)) break;
             }
-            õigeSamm = new SisestusSamm(0, räsi, i);
+            õigeSamm = new SisestamiseSamm(0, räsi, i);
 
             if (paisktabel.get(räsi).size() == 0) { // Lisatakse tühja kimpu
                 return new Hinnang(õigeSamm, LISAMINE, samm, õigeSamm.equals(samm));
@@ -169,7 +169,7 @@ public class KimbuYlesanne extends Ylesanne {
         else {
             for (int i = 0; i < paisktabel.size(); i++) {
                 if (paisktabel.get(i).size() > 0) {
-                    õigeSamm = new EemaldusSamm<Float>(abijärjend.size(), i, 0);
+                    õigeSamm = new EemaldamiseSamm<Float>(abijärjend.size(), i, 0);
                     return new Hinnang(õigeSamm, EEMALDAMINE, samm, õigeSamm.equals(samm));
                 }
             }

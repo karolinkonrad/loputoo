@@ -4,19 +4,19 @@ import main.Läbimäng;
 
 import java.util.Objects;
 
-public class PaisktabeliLoomisSamm implements Samm {
+public class PaisktabeliLoomiseSamm implements Samm {
     private final float minElement;
     private final float maxElement;
     private final int paisktabeliPikkus;
 
-    public PaisktabeliLoomisSamm(int paisktabeliPikkus) {
+    public PaisktabeliLoomiseSamm(int paisktabeliPikkus) {
         super();
         this.minElement = 0;
         this.maxElement = 0;
         this.paisktabeliPikkus = paisktabeliPikkus;
     }
 
-    public PaisktabeliLoomisSamm(float minElement, float maxElement, int paisktabeliPikkus) {
+    public PaisktabeliLoomiseSamm(float minElement, float maxElement, int paisktabeliPikkus) {
         super();
         this.minElement = minElement;
         this.maxElement = maxElement;
@@ -40,7 +40,7 @@ public class PaisktabeliLoomisSamm implements Samm {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PaisktabeliLoomisSamm that = (PaisktabeliLoomisSamm) o;
+        PaisktabeliLoomiseSamm that = (PaisktabeliLoomiseSamm) o;
         return paisktabeliPikkus == that.paisktabeliPikkus;
     }
 

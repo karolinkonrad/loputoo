@@ -4,13 +4,13 @@ import main.samm.Samm;
 
 public class Hinnang {
     public final Samm õigeSamm;
-    public final int liik;
+    public final int olek;
     public final Samm tudengiSamm;
     public final boolean õige;
 
-    public Hinnang(Samm õigeSamm, int liik, Samm tudengiSamm, boolean õige) {
+    public Hinnang(Samm õigeSamm, int olek, Samm tudengiSamm, boolean õige) {
         this.õigeSamm = õigeSamm;
-        this.liik = liik;
+        this.olek = olek;
         this.tudengiSamm = tudengiSamm;
         this.õige = õige;
     }
@@ -19,10 +19,10 @@ public class Hinnang {
     public String toString() {
         if (õige) {
             return "> " + tudengiSamm.toString() + "\n"
-                    + liik;
+                    + olek;
         }
         return "*VIGA*\n> " + tudengiSamm.toString() + "\n"
                 + "õige -> " + õigeSamm.toString() + "\n"
-                + liik;
+                + olek;
     }
 }

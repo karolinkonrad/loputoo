@@ -1,6 +1,5 @@
 package main.ylesanne;
 
-import main.Hindaja;
 import main.Hinnang;
 import main.Paisktabel;
 import main.samm.*;
@@ -75,7 +74,7 @@ public class PositsiooniYlesanne extends Ylesanne {
         ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 
         Paisktabel p = new Paisktabel(0, 10);
-        õigeLäbimäng.add(new Hinnang(new PaisktabeliLoomisSamm(10), TABELIOP, null, true));
+        õigeLäbimäng.add(new Hinnang(new PaisktabeliLoomiseSamm(10), TABELIOP, null, true));
 
         järk = 0;
         while ( (maxElem / Math.pow(10, järk)) > 1 ) {
@@ -87,8 +86,8 @@ public class PositsiooniYlesanne extends Ylesanne {
 
                 p.sisesta(räsi, i, arv);
 
-                if (i > 0) õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, räsi, i), RASKEOP, null, true));
-                else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, räsi, i), LISAMINE, null, true));
+                if (i > 0) õigeLäbimäng.add(new Hinnang(new SisestamiseSamm(0, räsi, i), RASKEOP, null, true));
+                else õigeLäbimäng.add(new Hinnang(new SisestamiseSamm(0, räsi, i), LISAMINE, null, true));
             }
 
             sisend.clear();
@@ -96,14 +95,14 @@ public class PositsiooniYlesanne extends Ylesanne {
                 while (p.get(i).size() > 0){
                     sisend.add((Integer) p.get(i, 0));
                     p.eemalda(i, 0);
-                    õigeLäbimäng.add(new Hinnang(new EemaldusSamm(sisend.size()-1, i, 0), EEMALDAMINE, null, true));
+                    õigeLäbimäng.add(new Hinnang(new EemaldamiseSamm(sisend.size()-1, i, 0), EEMALDAMINE, null, true));
                 }
             }
 
             järk++;
         }
 
-        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), LÕPP, null, true));
+        õigeLäbimäng.add(new Hinnang(new LõpetamiseSamm(), LÕPP, null, true));
 
         järk = 0;
         sisestamine = true;
@@ -117,10 +116,10 @@ public class PositsiooniYlesanne extends Ylesanne {
 
     @Override
     public void astu(Hinnang hinnang) {
-        if (hinnang.õige && hinnang.liik == EEMALDAMINE && sisestamine) {
+        if (hinnang.õige && hinnang.olek == EEMALDAMINE && sisestamine) {
             sisestamine = false;
         }
-        if (hinnang.õige && hinnang.liik == LISAMINE && !sisestamine) {
+        if (hinnang.õige && hinnang.olek == LISAMINE && !sisestamine) {
             sisestamine = true;
             järk++;
         }
@@ -128,10 +127,10 @@ public class PositsiooniYlesanne extends Ylesanne {
 
     @Override
     public void tagasi(Hinnang hinnang) {
-        if (hinnang.õige && hinnang.liik == EEMALDAMINE && sisestamine) {
+        if (hinnang.õige && hinnang.olek == EEMALDAMINE && sisestamine) {
             sisestamine = false;
         }
-        if (hinnang.õige && hinnang.liik == LISAMINE && !sisestamine) {
+        if (hinnang.õige && hinnang.olek == LISAMINE && !sisestamine) {
             sisestamine = true;
             järk--;
         }
@@ -139,11 +138,11 @@ public class PositsiooniYlesanne extends Ylesanne {
 
     @Override
     public Hinnang hindaSammu(Samm samm, ArrayList abijärjend, Paisktabel paisktabel) {
-        Samm õigeSamm = new LõpetusSamm();
+        Samm õigeSamm = new LõpetamiseSamm();
 
 
         if (paisktabel.size() == 0) {
-            õigeSamm = new PaisktabeliLoomisSamm(abijärjend.size());
+            õigeSamm = new PaisktabeliLoomiseSamm(abijärjend.size());
             return new Hinnang(õigeSamm, TABELIOP, samm, õigeSamm.equals(samm));
         }
 
@@ -156,7 +155,7 @@ public class PositsiooniYlesanne extends Ylesanne {
                 int räsi = paiskfunktsioon(arv);
                 int koht = paisktabel.get(räsi).size();
 
-                õigeSamm = new SisestusSamm(0, räsi, koht);
+                õigeSamm = new SisestamiseSamm(0, räsi, koht);
 
                 if (koht == 0) { // Lisatakse tühja kimpu
                     return new Hinnang(õigeSamm, LISAMINE, samm, õigeSamm.equals(samm));
@@ -167,7 +166,7 @@ public class PositsiooniYlesanne extends Ylesanne {
             else {
                 for (int i = 0; i < paisktabel.size(); i++) {
                     if (paisktabel.get(i).size() > 0) {
-                        õigeSamm = new EemaldusSamm<Float>(abijärjend.size(), i, 0);
+                        õigeSamm = new EemaldamiseSamm<Float>(abijärjend.size(), i, 0);
                         return new Hinnang(õigeSamm, EEMALDAMINE, samm, õigeSamm.equals(samm));
                     }
                 }

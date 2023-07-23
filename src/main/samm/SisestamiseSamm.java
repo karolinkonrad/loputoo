@@ -4,13 +4,13 @@ import main.Läbimäng;
 
 import java.util.Objects;
 
-public class SisestusSamm<T> implements Samm {
+public class SisestamiseSamm<T> implements Samm {
     private final int index; //indeks abimassiivis
     private final int räsi; //võti paisktabelis
     private final int koht; //koht ahelas
     private T element;
 
-    public SisestusSamm(int index, int räsi, int koht) {
+    public SisestamiseSamm(int index, int räsi, int koht) {
         super();
         this.index = index;
         this.räsi = räsi;
@@ -40,7 +40,7 @@ public class SisestusSamm<T> implements Samm {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SisestusSamm that = (SisestusSamm) o;
+        SisestamiseSamm that = (SisestamiseSamm) o;
         return index == that.index && räsi == that.räsi && koht == that.koht;
     }
 

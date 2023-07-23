@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Hindaja {
-    // operatsiooni liik
+    // läbimängu olekud
     public static final int RASKEOP = 1;
     public static final int LISAMINE = 2;
     public static final int TABELIOP = 3;

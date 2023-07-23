@@ -2,9 +2,9 @@ package main.ylesanne;
 
 import main.Hinnang;
 import main.Paisktabel;
-import main.samm.LõpetusSamm;
+import main.samm.LõpetamiseSamm;
 import main.samm.Samm;
-import main.samm.SisestusSamm;
+import main.samm.SisestamiseSamm;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,13 +72,13 @@ public class LisamiseYlesanne extends Ylesanne {
             int koht = p.leiaVabaKoht(räsi);
 
             if (räsi != koht)
-                õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, koht, 0), RASKEOP, null, true));
-            else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, koht, 0), LISAMINE, null, true));
+                õigeLäbimäng.add(new Hinnang(new SisestamiseSamm(0, koht, 0), RASKEOP, null, true));
+            else õigeLäbimäng.add(new Hinnang(new SisestamiseSamm(0, koht, 0), LISAMINE, null, true));
 
             p.sisesta(koht, 0, arv);
         }
 
-        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), LÕPP, null, true));
+        õigeLäbimäng.add(new Hinnang(new LõpetamiseSamm(), LÕPP, null, true));
         return õigeLäbimäng;
     }
 
@@ -102,14 +102,14 @@ public class LisamiseYlesanne extends Ylesanne {
     public Hinnang hindaSammu(Samm samm, ArrayList abijärjend, Paisktabel paisktabel) {
         // tagastab vea tüübi
 
-        Samm õigeSamm = new LõpetusSamm();
+        Samm õigeSamm = new LõpetamiseSamm();
 
         if (abijärjend.size() > 0) { // veel on lisamata kirjeid
             int arv = (int) abijärjend.get(0);
 
             int räsi = paiskfunktsioon(arv, paisktabel);
             int vabaRäsi = paisktabel.leiaVabaKoht(räsi);
-            õigeSamm = new SisestusSamm(0, vabaRäsi, 0);
+            õigeSamm = new SisestamiseSamm(0, vabaRäsi, 0);
 
             if (vabaRäsi == räsi) { // nihutamisi ei tehta
                 return new Hinnang(õigeSamm, LISAMINE, samm, õigeSamm.equals(samm));

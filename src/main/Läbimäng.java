@@ -10,7 +10,7 @@ public class Läbimäng<T> {
 
     private Stack<Hinnang> läbimäng;
 
-    private Ylesanne ylesanne;
+    private Ylesanne<T> ylesanne;
     private Paisktabel<T> paisktabel;
     private ArrayList<T> abijärjend;
     private ArrayList<Hinnang> õigeLäbimäng;

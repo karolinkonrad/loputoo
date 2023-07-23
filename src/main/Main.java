@@ -1,9 +1,9 @@
 package main;
 
-import main.samm.EemaldusSamm;
-import main.samm.LõpetusSamm;
-import main.samm.PaisktabeliLoomisSamm;
-import main.samm.SisestusSamm;
+import main.samm.EemaldamiseSamm;
+import main.samm.LõpetamiseSamm;
+import main.samm.PaisktabeliLoomiseSamm;
+import main.samm.SisestamiseSamm;
 import main.ylesanne.*;
 
 import java.io.IOException;
@@ -57,12 +57,12 @@ public class Main {
                             case "p":
                                 System.out.print("Sisesta paisktabeli pikkus: ");
                                 userCommand = sc.nextLine().split(" ");
-                                context.astu(new PaisktabeliLoomisSamm(Integer.parseInt(userCommand[0])));
+                                context.astu(new PaisktabeliLoomiseSamm(Integer.parseInt(userCommand[0])));
                                 break;
                             case "k":
                                 System.out.print("Sisesta a b m (eraldatud tühikutega): ");
                                 userCommand = sc.nextLine().split(" ");
-                                context.astu(new PaisktabeliLoomisSamm(Float.valueOf(userCommand[0]), Float.valueOf(userCommand[1]), Integer.parseInt(userCommand[2])));
+                                context.astu(new PaisktabeliLoomiseSamm(Float.valueOf(userCommand[0]), Float.valueOf(userCommand[1]), Integer.parseInt(userCommand[2])));
                                 break;
                             default:
 
@@ -91,24 +91,24 @@ public class Main {
                 switch (userCommand[0]) {
                     // l algoritm lõpetab
                     case "l":
-                        context.astu(new LõpetusSamm());
+                        context.astu(new LõpetamiseSamm());
                         System.out.println("Hinne: " + context.getPunktid() + "%");
                         return;
 
                     // s <i> <v> sisesta element massiivist indeksilt i paisktabelisse võtmele v
                     case "s":
                         if (userCommand.length > 3)
-                            context.astu(new SisestusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[3])));
+                            context.astu(new SisestamiseSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[3])));
                         else
-                            context.astu(new SisestusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), 0));
+                            context.astu(new SisestamiseSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), 0));
                         break;
 
                     // e <i> <v> eemalda paisktabelist võtmelt v element ja pane see massiivi indeksile i
                     case "e":
                         if (userCommand.length > 3)
-                            context.astu(new EemaldusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[3])));
+                            context.astu(new EemaldamiseSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), Integer.parseInt(userCommand[3])));
                         else
-                            context.astu(new EemaldusSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), 0));
+                            context.astu(new EemaldamiseSamm(Integer.parseInt(userCommand[1]), Integer.parseInt(userCommand[2]), 0));
                         break;
 
                     // u võta samm tagasi

@@ -81,7 +81,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
         eemaldatavaRäsi = p.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav, p));
         p.eemalda(eemaldatavaRäsi, 0);
 
-        õigeLäbimäng.add(new Hinnang(new EemaldusSamm(0, eemaldatavaRäsi, 0), KUSTUTAMINE, null, true));
+        õigeLäbimäng.add(new Hinnang(new EemaldamiseSamm(0, eemaldatavaRäsi, 0), KUSTUTAMINE, null, true));
 
         int i = eemaldatavaRäsi;
 
@@ -94,16 +94,16 @@ public class EemaldamiseYlesanne extends Ylesanne{
             int arv = (int) p.get(i, 0);
             kompejadaAlgsedIndeksid.put(arv, i);
             p.eemalda(i, 0);
-            õigeLäbimäng.add(new Hinnang(new EemaldusSamm(0, i, 0), EEMALDAMINE, null, true));
+            õigeLäbimäng.add(new Hinnang(new EemaldamiseSamm(0, i, 0), EEMALDAMINE, null, true));
 
             int uusKoht = p.leiaVabaKoht(paiskfunktsioon(arv, p));
             if (uusKoht != i)
-                õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, uusKoht, 0), RASKEOP, null, true));
-            else õigeLäbimäng.add(new Hinnang(new SisestusSamm(0, uusKoht, 0), LISAMINE, null, true));
+                õigeLäbimäng.add(new Hinnang(new SisestamiseSamm(0, uusKoht, 0), RASKEOP, null, true));
+            else õigeLäbimäng.add(new Hinnang(new SisestamiseSamm(0, uusKoht, 0), LISAMINE, null, true));
             p.sisesta(uusKoht, 0, arv);
 
         }
-        õigeLäbimäng.add(new Hinnang(new LõpetusSamm(), LÕPP, null, true));
+        õigeLäbimäng.add(new Hinnang(new LõpetamiseSamm(), LÕPP, null, true));
 
         järg = 0;
 
@@ -118,24 +118,24 @@ public class EemaldamiseYlesanne extends Ylesanne{
 
     @Override
     public void astu(Hinnang hinnang) {
-        if ((hinnang.liik == EEMALDAMINE || hinnang.liik == KUSTUTAMINE) && hinnang.õige)
+        if ((hinnang.olek == EEMALDAMINE || hinnang.olek == KUSTUTAMINE) && hinnang.õige)
             järg++;
     }
 
     @Override
     public void tagasi(Hinnang hinnang) {
-        if ((hinnang.liik == EEMALDAMINE || hinnang.liik == KUSTUTAMINE) && hinnang.õige)
+        if ((hinnang.olek == EEMALDAMINE || hinnang.olek == KUSTUTAMINE) && hinnang.õige)
             järg--;
     }
 
     @Override
     public Hinnang hindaSammu(Samm samm, ArrayList abijärjend, Paisktabel paisktabel) {
-        Samm õigeSamm = new LõpetusSamm();
+        Samm õigeSamm = new LõpetamiseSamm();
 
 
         if (abijärjend.size() == 0) { // kas eemaldatav on eemaldatud?
             int eemaldatavaVõti = paisktabel.leiaAsukoht(eemaldatav, paiskfunktsioon(eemaldatav, paisktabel));
-            õigeSamm = new EemaldusSamm(0, eemaldatavaVõti, 0);
+            õigeSamm = new EemaldamiseSamm(0, eemaldatavaVõti, 0);
 
             return new Hinnang(õigeSamm, KUSTUTAMINE, samm, õigeSamm.equals(samm));
         }
@@ -147,7 +147,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
             int räsi = paiskfunktsioon(arv, paisktabel);
             int vabaRäsi = paisktabel.leiaVabaKoht(räsi);
 
-            õigeSamm = new SisestusSamm(0, vabaRäsi, 0);
+            õigeSamm = new SisestamiseSamm(0, vabaRäsi, 0);
 
             if (vabaRäsi != kompejadaAlgsedIndeksid.get(arv)) { // kas uus vabaRäsi on erinev vanast võtmest?
                 return new Hinnang(õigeSamm, RASKEOP, samm, õigeSamm.equals(samm));
@@ -163,7 +163,7 @@ public class EemaldamiseYlesanne extends Ylesanne{
             // algoritm lõpetab 
             return new Hinnang(õigeSamm, LÕPP, samm, õigeSamm.equals(samm));
 
-        õigeSamm = new EemaldusSamm(0, järg, 0);
+        õigeSamm = new EemaldamiseSamm(0, järg, 0);
         return new Hinnang(õigeSamm, EEMALDAMINE, samm, õigeSamm.equals(samm));
         
     }
