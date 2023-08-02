@@ -3,7 +3,6 @@ package main.samm;
 import main.Läbimäng;
 
 public class LõpetamiseSamm implements Samm {
-    // kuidagi seotud hindamisega
 
     @Override
     public boolean astu(Läbimäng läbimäng) {
@@ -19,8 +18,7 @@ public class LõpetamiseSamm implements Samm {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        return true;
+        return o != null && getClass() == o.getClass();
     }
 
     @Override

@@ -5,14 +5,14 @@ import main.Läbimäng;
 import java.util.Objects;
 
 public class EemaldamiseSamm<T> implements Samm {
-    private final int index; //indeks abimassiivis
+    private final int indeks; //indeks abimassiivis
     private final int räsi; //võti paisktabelis
     private final int koht; //koht ahelas
     private T element;
 
-    public EemaldamiseSamm(int index, int räsi, int koht) {
+    public EemaldamiseSamm(int indeks, int räsi, int koht) {
         super();
-        this.index = index;
+        this.indeks = indeks;
         this.räsi = räsi;
         this.koht = koht;
     }
@@ -20,11 +20,11 @@ public class EemaldamiseSamm<T> implements Samm {
     @Override
     public boolean astu(Läbimäng läbimäng) {
         element = (T) läbimäng.getPaisktabel().get(räsi, koht);
-        if (element == null || index > läbimäng.getAbijärjend().size())
+        if (element == null || indeks > läbimäng.getAbijärjend().size())
             return false;
 
         läbimäng.getPaisktabel().eemalda(räsi, koht);
-        läbimäng.getAbijärjend().add(index, element);
+        läbimäng.getAbijärjend().add(indeks, element);
 
         return true;
     }
@@ -32,7 +32,7 @@ public class EemaldamiseSamm<T> implements Samm {
     @Override
     public boolean tagasi(Läbimäng läbimäng) {
         läbimäng.getPaisktabel().sisesta(räsi, koht, element);
-        läbimäng.getAbijärjend().remove(index);
+        läbimäng.getAbijärjend().remove(indeks);
         return true;
     }
 
@@ -40,17 +40,17 @@ public class EemaldamiseSamm<T> implements Samm {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EemaldamiseSamm that = (EemaldamiseSamm) o;
-        return index == that.index && räsi == that.räsi && koht == that.koht;
+        EemaldamiseSamm<T> that = (EemaldamiseSamm) o;
+        return indeks == that.indeks && räsi == that.räsi && koht == that.koht;
     }
 
     @Override
     public String toString() {
-        return "Eemalda: p[" + räsi + "][" + koht + "] -> m[" + index + "]";
+        return "Eemalda: p[" + räsi + "][" + koht + "] -> m[" + indeks + "]";
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(index, räsi, koht);
+        return Objects.hash(indeks, räsi, koht);
     }
 }

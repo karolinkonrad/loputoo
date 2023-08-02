@@ -4,11 +4,11 @@ import main.samm.Samm;
 
 public class Hinnang {
     public final Samm õigeSamm;
-    public final int olek;
+    public final Hindaja.Olek olek;
     public final Samm tudengiSamm;
     public final boolean õige;
 
-    public Hinnang(Samm õigeSamm, int olek, Samm tudengiSamm, boolean õige) {
+    public Hinnang(Samm õigeSamm, Hindaja.Olek olek, Samm tudengiSamm, boolean õige) {
         this.õigeSamm = õigeSamm;
         this.olek = olek;
         this.tudengiSamm = tudengiSamm;

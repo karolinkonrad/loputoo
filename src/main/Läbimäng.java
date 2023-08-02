@@ -20,8 +20,11 @@ public class Läbimäng<T> {
 
     private float punktid;
 
-
-    public void setYlesanne(Ylesanne ylesanne) {
+    /**
+     * Ülesande määramine ja algväärtuste määramine.
+     * @param ylesanne Antud ülesanne.
+     */
+    public void setYlesanne(Ylesanne<T> ylesanne) {
         this.läbimäng = new Stack<>();
 
         this.ylesanne = ylesanne;
@@ -38,7 +41,7 @@ public class Läbimäng<T> {
         this.hindaja = hindaja;
     }
     public void setPaisktabeliParameetrid(float minElem, float maxElem, int elementideArv) { // m a b
-        ylesanne.paisktabeliParameetrid(minElem, maxElem, elementideArv);
+        ylesanne.setPaisktabeliParameetrid(minElem, maxElem, elementideArv);
     }
     public Paisktabel<T> getPaisktabel() {
         return paisktabel;
@@ -51,13 +54,18 @@ public class Läbimäng<T> {
         return punktid;
     }
 
+    /**
+     * Sammu ehk käsu kontrollimine, täitmine ja salvestamine.
+     * @param samm Antud käsk.
+     * @return Kas käsk täideti edukalt?
+     */
     public boolean astu(Samm samm) {
         Hinnang hinnang = ylesanne.hindaSammu(samm, abijärjend, paisktabel);
         läbimäng.push(hinnang);
 
         logija.logi(abijärjend.toString() + "\n"
-                + paisktabel.toString() + "\n"
-                + "---------------------------------------------------------\n"
+                + paisktabel.toString()
+                + "\n---------------------------------------------------------\n"
                 + hinnang.toString());
 
         if (samm.astu(this)) {
@@ -70,6 +78,10 @@ public class Läbimäng<T> {
         return false;
     }
 
+    /**
+     * Sammu ehk käsu tagasivõtmine.
+     * @return Kas sammude jada oli tühi?
+     */
     public boolean tagasi() {
 
         if (läbimäng.isEmpty()) return true;
@@ -78,22 +90,28 @@ public class Läbimäng<T> {
         if (hinnang.tudengiSamm.tagasi(this)) {
             ylesanne.tagasi(this, hinnang);
             logija.logi(abijärjend.toString() + "\n"
-                    + paisktabel.toString() + "---------------------------------------------------------\n"
+                    + paisktabel.toString() + "\n---------------------------------------------------------\n"
                     + "\nTAGASI:\n"
                     + hinnang);
         }
         else
             läbimäng.push(hinnang);
 
-        if (läbimäng.isEmpty()) return true;
         return false;
     }
 
+    /**
+     * Läbimängu lõpetamine ja hinde arvutamine.
+     */
     public void lõpeta() {
         punktid = hindaja.arvutaHinne(läbimäng, õigeLäbimäng);
         logija.logi("###########################\nHinne: " + punktid + "%\n");
     }
 
+    /**
+     * Ülesande kirjelduse edastamine.
+     * @return
+     */
     public String ylesandeKirjeldus() {
         return ylesanne.ylesandeKirjeldus();
     }

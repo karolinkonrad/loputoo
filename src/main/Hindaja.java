@@ -5,14 +5,22 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Hindaja {
-    // läbimängu olekud
-    public static final int RASKEOP = 1;
-    public static final int LISAMINE = 2;
-    public static final int TABELIOP = 3;
-    public static final int LÕPP = 4;
-    public static final int EEMALDAMINE = 5;
-    public static final int KUSTUTAMINE = 6;
 
+    public enum Olek {
+        RASKE_LISAMINE,
+        LISAMINE,
+        TABELI_LOOMINE,
+        LÕPP,
+        EEMALDAMINE,
+        KUSTUTAMINE;
+    }
+
+    /**
+     * Hinde arvutamine.
+     * @param läbimäng Tudengi läbimäng.
+     * @param õigeLäbimäng Õige läbimäng.
+     * @return
+     */
     public float arvutaHinne(Stack<Hinnang> läbimäng, ArrayList<Hinnang> õigeLäbimäng) {
 
         float punktideSumma = 0f;

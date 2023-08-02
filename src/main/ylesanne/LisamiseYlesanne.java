@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static main.Hindaja.*;
+import static main.Hindaja.Olek.*;
 
-public class LisamiseYlesanne extends Ylesanne {
+public class LisamiseYlesanne extends Ylesanne<Integer> {
 
     private ArrayList<Integer> sisend;
     private int kompesamm;
@@ -27,9 +27,15 @@ public class LisamiseYlesanne extends Ylesanne {
 
     }
 
+    /**
+     * Failist ülesande andmete lugemine.
+     * Rakendatakse konstruktoris. Salvestab sisendi ja kompesammu.
+     * @param failiTee Antud faili tee
+     * @throws IOException
+     */
     @Override
-    public void loeSisend(String faili_tee) throws IOException {
-        File file = new File( faili_tee);
+    public void loeSisend(String failiTee) throws IOException {
+        File file = new File(failiTee);
         sisend = new ArrayList<>();
 
         if (file.isFile() && file.getName().endsWith(".txt")) {
@@ -46,25 +52,32 @@ public class LisamiseYlesanne extends Ylesanne {
         }
     }
 
+    /**
+     * Algse paisktabeli andmine.
+     * @return Uus paisktabel, milles on sama palju ridu, kui on sisendi pikkus.
+     */
     @Override
-    public Paisktabel getPaisktabel() {
-        return new Paisktabel(kompesamm, sisend.size());
+    public Paisktabel<Integer> getPaisktabel() {
+        return new Paisktabel<>(kompesamm, sisend.size());
     }
 
+    /**
+     * Algse abijärjendi andmine.
+     * @return Koopia sisendist.
+     */
     @Override
-    public ArrayList getAbijärjend() {
-        return (ArrayList) sisend.clone();
+    public ArrayList<Integer> getAbijärjend() {
+        return new ArrayList<>(sisend);
     }
 
+    //pole vajalik
     @Override
-    public void paisktabeliParameetrid(float minElem, float maxElem, int elementideArv) {
-
+    public void setPaisktabeliParameetrid(float minElem, float maxElem, int elementideArv) {
     }
 
     @Override
     public ArrayList<Hinnang> leiaÕigeLäbimäng() {
-        // õige läbimängu sammude leidmine
-        Paisktabel p = getPaisktabel();
+        Paisktabel<Integer> p = getPaisktabel();
 
         ArrayList<Hinnang> õigeLäbimäng = new ArrayList<>();
 
@@ -73,8 +86,8 @@ public class LisamiseYlesanne extends Ylesanne {
             int koht = p.leiaVabaKoht(räsi);
 
             if (räsi != koht)
-                õigeLäbimäng.add(new Hinnang(new SisestamiseSamm(0, koht, 0), RASKEOP, null, true));
-            else õigeLäbimäng.add(new Hinnang(new SisestamiseSamm(0, koht, 0), LISAMINE, null, true));
+                õigeLäbimäng.add(new Hinnang(new SisestamiseSamm<Integer>(0, koht, 0), RASKE_LISAMINE, null, true));
+            else õigeLäbimäng.add(new Hinnang(new SisestamiseSamm<Integer>(0, koht, 0), LISAMINE, null, true));
 
             p.sisesta(koht, 0, arv);
         }
@@ -86,37 +99,38 @@ public class LisamiseYlesanne extends Ylesanne {
     @Override
     public String ylesandeKirjeldus() {
         return "Olgu lahtise adresseerimisega paisktabelil jääkpaiskamine, kompesamm " + kompesamm + " ja ridu " + sisend.size()
-                + ".\nLisa paisktabelisse samas järjekorras järgmised elemendid: " + sisend.toString();
+                + ".\nLisa paisktabelisse samas järjekorras järgmised elemendid: " + sisend;
     }
 
+    //pole vajalik
     @Override
-    public void astu(Läbimäng läbimäng, Hinnang hinnang) {
-
-    }
-
-    @Override
-    public void tagasi(Läbimäng läbimäng, Hinnang hinnang) {
+    public void astu(Läbimäng<Integer> läbimäng, Hinnang hinnang) {
 
     }
 
+    //pole vajalik
     @Override
-    public Hinnang hindaSammu(Samm samm, ArrayList abijärjend, Paisktabel paisktabel) {
-        // tagastab vea tüübi
+    public void tagasi(Läbimäng<Integer> läbimäng, Hinnang hinnang) {
+
+    }
+
+    @Override
+    public Hinnang hindaSammu(Samm samm, ArrayList<Integer> abijärjend, Paisktabel<Integer> paisktabel) {
 
         Samm õigeSamm = new LõpetamiseSamm();
 
         if (abijärjend.size() > 0) { // veel on lisamata kirjeid
-            int arv = (int) abijärjend.get(0);
+            int arv = abijärjend.get(0);
 
             int räsi = paiskfunktsioon(arv, paisktabel);
             int vabaRäsi = paisktabel.leiaVabaKoht(räsi);
-            õigeSamm = new SisestamiseSamm(0, vabaRäsi, 0);
+            õigeSamm = new SisestamiseSamm<Integer>(0, vabaRäsi, 0);
 
             if (vabaRäsi == räsi) { // nihutamisi ei tehta
                 return new Hinnang(õigeSamm, LISAMINE, samm, õigeSamm.equals(samm));
             }
             else
-                return new Hinnang(õigeSamm, RASKEOP, samm, õigeSamm.equals(samm));
+                return new Hinnang(õigeSamm, RASKE_LISAMINE, samm, õigeSamm.equals(samm));
 
         }
         // algoritm lõpetab

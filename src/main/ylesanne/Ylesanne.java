@@ -10,17 +10,66 @@ import java.util.ArrayList;
 
 public abstract class Ylesanne<T> {
 
-    public int paiskfunktsioon(int arv, Paisktabel paisktabel) {return arv % paisktabel.size();}
+    /**
+     * Arvu räsi arvutamine jääkpaiskamisega.
+     * @param arv Antud arv.
+     * @param paisktabel Antud paisktabel.
+     * @return Arvu räsi
+     */
+    public int paiskfunktsioon(int arv, Paisktabel<T> paisktabel) {return arv % paisktabel.size();}
 
-    abstract public void loeSisend(String faili_tee) throws IOException;
+    /**
+     * Failist andmete lugemine.
+     * @param failiTee Antud faili tee
+     * @throws IOException
+     */
+    abstract public void loeSisend(String failiTee) throws IOException;
+
+    /**
+     * @return Algne paisktabel.
+     */
     abstract public Paisktabel<T> getPaisktabel();
+
+    /**
+     * @return Algne abijärjend
+     */
     abstract public ArrayList<T> getAbijärjend();
-    abstract public void paisktabeliParameetrid(float minElem, float maxElem, int elementideArv);
+
+    abstract public void setPaisktabeliParameetrid(float minElem, float maxElem, int elementideArv);
+
+    /**
+     * Õige läbimängu läbi tegemine.
+     * @return Läbimängu kujutav hinnangute jada.
+     */
     abstract public ArrayList<Hinnang> leiaÕigeLäbimäng();
 
+    /**
+     * Ülesandekirjelduse koostamine.
+     * @return Ülesande kirjeldus.
+     */
     abstract public String ylesandeKirjeldus();
-    abstract public void astu(Läbimäng läbimäng, Hinnang hinnang);
-    abstract public void tagasi(Läbimäng läbimäng, Hinnang hinnang);
-    abstract public Hinnang hindaSammu(Samm samm, ArrayList<T> abimassiiv, Paisktabel<T> paisktabel);
+
+    /**
+     * Ülesande seisus muudatuste tegemine.
+     * @param läbimäng Jooksev läbimäng.
+     * @param hinnang Viimase sammu hinnang.
+     */
+    abstract public void astu(Läbimäng<T> läbimäng, Hinnang hinnang);
+
+    /**
+     * Ülesande seisu tagasi võtmine.
+     * @param läbimäng Jooksev läbimäng.
+     * @param hinnang Viimase sammu hinnang.
+     */
+    abstract public void tagasi(Läbimäng<T> läbimäng, Hinnang hinnang);
+
+    /**
+     * Tudengi tehtud sammule õige sammu leidmine.
+     * @param samm Tudengi tehtud samm.
+     * @param abijärjend Jooksva läbimängu abijärjendi seis.
+     * @param paisktabel Jooksva läbimängu paisktabeli seis.
+     * @return Hinnang tehtud sammule.
+     */
+    abstract public Hinnang hindaSammu(Samm samm, ArrayList<T> abijärjend, Paisktabel<T> paisktabel);
 
 }
