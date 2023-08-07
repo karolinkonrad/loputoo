@@ -73,7 +73,7 @@ public class Läbimäng<T> {
 
             return true;
         }
-        logija.logi("   VIGANE SAMM");
+        logija.logi("   VIGANE KÄSK");
         läbimäng.pop();
         return false;
     }

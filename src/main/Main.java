@@ -83,12 +83,13 @@ public class Main {
             }
 
             System.out.println("-----------------------------------------------------------");
-            System.out.println("järjend: " + läbimäng.getAbijärjend().toString());
-            System.out.println("paisktabel: " + läbimäng.getPaisktabel().toString());
+            System.out.println("töödeldav alamjärjend: " + läbimäng.getAbijärjend().toString());
+            System.out.println("paisktabel:\n" + läbimäng.getPaisktabel().toString());
             System.out.println("""
+                    Vali käsk:
                     l - algoritm lõpetab
-                    s <i> <r> <k> - sisesta element massiivist indeksilt i paisktabelisse indeksile r kohale k
-                    e <i> <r> <k> - eemalda paisktabelist realt r kohalt k element ja pane see massiivi indeksile i
+                    s <i> <r> (<k>) - sisesta element massiivist indeksilt i paisktabelisse reale r (kohale k)
+                    e <i> <r> (<k>) - eemalda paisktabelist realt r (kohalt k) element ja pane see massiivi indeksile i
                     u - võta samm tagasi""");
 
             userCommand = sc.nextLine().split(" ");

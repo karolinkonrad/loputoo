@@ -118,7 +118,7 @@ public class Paisktabel<T> {
 
         for (int i = 0; i < tabel.size(); i++) {
 
-            str.append(i).append(":").append(tabel.get(i).toString()).append(" ");
+            str.append(i).append(":").append(tabel.get(i).toString()).append("\n");
         }
         return str.toString();
     }
